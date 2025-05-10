@@ -10,6 +10,10 @@
   ],
   "license": "MIT + Commons Clause",
   "author": "qew4",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/qew4/mixone"
+  },
   "keywords": [
     "mixone",
     "electron",
