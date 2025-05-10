@@ -1,0 +1,18 @@
+{
+  "name": "____name____",
+  "version": "____version____",
+  "scripts": {
+    "build": "vite build",
+    "build:web": "vite build --outDir=web-dist"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+
+  },
+  "dependencies": {
+
+  }
+}
