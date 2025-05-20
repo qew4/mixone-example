@@ -84,12 +84,12 @@ npm run dev
 
 ## 项目结构
 - 目录说明
-    your-mixone-project/              # 项目根目录
-        ├── components/                    # 公共组件目录
-        │   ├── Button/                   # 按钮组件
-        │   └── Dialog/                   # 对话框组件
-        ├── windows/                      # 主窗口
-        │   ├── Index.vue                     # 窗口入口
+    your-mixone-project/
+        ├── components/
+        │   ├── Button/
+        │   └── Dialog/
+        ├── windows/
+        │   ├── Index.vue
         │   └── other-window/            # 其他窗口
         │       ├── Index.vue               #窗口入口
         ├── main/                         # 主进程代码
