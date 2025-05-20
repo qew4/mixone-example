@@ -63,20 +63,12 @@ MixOne在electron应用开发框架中具有以下独特优势：
 
 MixOne的核心优势在于真正实现了"去概念化"设计理念，让开发者可以专注于业务代码开发，不必过多关注底层实现细节。通过创新的BS/CS双模式打包、智能的进程通信处理以及便捷的系统API访问等特性，显著提升了开发效率和使用体验。
 ## 快速开始
-- 安装
 ```
 npm install mixone -g
-```
-- 创建项目
-```
+//创建项目
 mixone create mixone-demo1
-```
-
-```
 cd demo1
-```
-
-```
+npm install //安装依赖 或 yarn
 npm run dev
 ```
 - 基本使用
@@ -84,21 +76,21 @@ npm run dev
 
 ## 项目结构
 - 目录说明
-    your-mixone-project/
-        ├── components/
-        │   ├── Button/
-        │   └── Dialog/
-        ├── windows/
-        │   ├── Index.vue
-        │   └── other-window/            # 其他窗口
-        │       ├── Index.vue               #窗口入口
-        ├── main/                         # 主进程代码
-        │   ├── main.js                  # 主进程入口文件
-        ├── utils/                        # 工具函数目录
-        │   ├── request.js               # 请求工具
-        │   └── common.js                # 通用工具函数
-        ├── out/                         # 编译输出目录
-        └── package.json                # 项目配置文件
+    your-mixone-project/              # 项目根目录
+    ├── components/                    # 公共组件目录
+    │   ├── Button/                   # 按钮组件
+    │   └── Dialog/                   # 对话框组件
+    ├── windows/                      # 主窗口
+    │   ├── Index.vue                     # 窗口入口
+    │   └── other-window/            # 其他窗口
+    │       ├── Index.vue               #窗口入口
+    ├── main/                         # 主进程代码
+    │   ├── main.js                  # 主进程入口文件
+    ├── utils/                        # 工具函数目录
+    │   ├── request.js               # 请求工具
+    │   └── common.js                # 通用工具函数
+    ├── out/                         # 编译输出目录
+    └── package.json                # 项目配置文件
 - 文件功能介绍
 	- 窗口目录
 		* 窗口目录是可以嵌套窗口的，窗口目录以“-window”结尾，否则不是窗口目录。
