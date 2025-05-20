@@ -76,21 +76,7 @@ npm run dev
 
 ## 项目结构
 - 目录说明
-    your-mixone-project/              # 项目根目录
-    ├── components/                    # 公共组件目录
-    │   ├── Button/                   # 按钮组件
-    │   └── Dialog/                   # 对话框组件
-    ├── windows/                      # 主窗口
-    │   ├── Index.vue                     # 窗口入口
-    │   └── other-window/            # 其他窗口
-    │       ├── Index.vue               #窗口入口
-    ├── main/                         # 主进程代码
-    │   ├── main.js                  # 主进程入口文件
-    ├── utils/                        # 工具函数目录
-    │   ├── request.js               # 请求工具
-    │   └── common.js                # 通用工具函数
-    ├── out/                         # 编译输出目录
-    └── package.json                # 项目配置文件
+![项目结构](./dir_structure.png)
 - 文件功能介绍
 	- 窗口目录
 		* 窗口目录是可以嵌套窗口的，窗口目录以“-window”结尾，否则不是窗口目录。
