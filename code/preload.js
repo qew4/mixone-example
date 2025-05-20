@@ -7,7 +7,7 @@ ipcRenderer.on('main-process-log', (event, { type, args }) => {
     // 确保 type 是有效的控制台方法
     const validTypes = ['log', 'error', 'warn', 'info', 'debug'];
     type = validTypes.includes(type) ? type : 'log';
-    
+
     // 确保 args 是数组且可以安全序列化
     args = Array.isArray(args) ? args.map(arg => {
       if (typeof arg === 'object' && arg !== null) {
@@ -42,10 +42,10 @@ ipcRenderer.on('broadcast', (event, { channel, data }) => {
     listeners.forEach(listener => listener(data));
   }
 });
-contextBridge.exposeInMainWorld('getWinId', ()=>{
+contextBridge.exposeInMainWorld('getWinId', () => {
   return _winId;
 });
-contextBridge.exposeInMainWorld('winId',_winId);
+contextBridge.exposeInMainWorld('winId', _winId);
 // 存储事件监听器
 const windowEventListeners = new Map();
 const windowObjEventListeners = new Map();
@@ -116,40 +116,40 @@ contextBridge.exposeInMainWorld('windowManager', {
     });
     const windowProperties = [
       // 'webContents',      
-      'id',   'tabbingIdentifier',    'autoHideMenuBar', 'simpleFullScreen',     'fullScreen',
+      'id', 'tabbingIdentifier', 'autoHideMenuBar', 'simpleFullScreen', 'fullScreen',
       'focusable',
-      'visibleOnAllWorkspaces',      'shadow',
-      'menuBarVisible',      'kiosk',
-      'documentEdited',      'representedFilename',      'title',      'minimizable',
-      'maximizable',      'fullScreenable',      'resizable',      'closable',      'movable',   
-         'excludedFromShownWindowsMenu',      'accessibleTitle'
+      'visibleOnAllWorkspaces', 'shadow',
+      'menuBarVisible', 'kiosk',
+      'documentEdited', 'representedFilename', 'title', 'minimizable',
+      'maximizable', 'fullScreenable', 'resizable', 'closable', 'movable',
+      'excludedFromShownWindowsMenu', 'accessibleTitle'
     ];
-    const windowMethods = ["destroy","close","focus","blur","isFocused","isDestroyed","show","showInactive","hide","isVisible","isModal","maximize","unmaximize",
-      "isMaximized","minimize","restore","isMinimized","setFullScreen","isFullScreen","setSimpleFullScreen","isSimpleFullScreen","isNormal","setAspectRatio",
-      "setBackgroundColor","previewFile","closeFilePreview","setBounds","getBounds","getBackgroundColor","setContentBounds","getContentBounds","getNormalBounds",
-      "setEnabled","isEnabled","setSize","getSize","setContentSize","getContentSize","setMinimumSize","getMinimumSize","setMaximumSize","getMaximumSize",
-      "setResizable","isResizable","setMovable","isMovable","setMinimizable","isMinimizable","setMaximizable","isMaximizable","setFullScreenable",
-      "isFullScreenable","setClosable","isClosable","setHiddenInMissionControl","isHiddenInMissionControl","setAlwaysOnTop","isAlwaysOnTop","moveAbove","moveTop",
-      "center","setPosition","getPosition","setTitle","getTitle","setSheetOffset","flashFrame","setSkipTaskbar","setKiosk","isKiosk","isTabletMode",
-      "getMediaSourceId","getNativeWindowHandle","hookWindowMessage","isWindowMessageHooked","unhookWindowMessage","unhookAllWindowMessages",
-      "setRepresentedFilename","getRepresentedFilename","setDocumentEdited","isDocumentEdited","focusOnWebView","blurWebView","capturePage","loadURL","loadFile",
-      "reload","setMenu","removeMenu","setProgressBar","setOverlayIcon","invalidateShadow","setHasShadow","hasShadow","setOpacity","getOpacity","setShape",
-      "setThumbarButtons","setThumbnailClip","setThumbnailToolTip","setAppDetails","showDefinitionForSelection","setIcon","setWindowButtonVisibility",
-      "setAutoHideMenuBar","isMenuBarAutoHide","setMenuBarVisibility","isMenuBarVisible","setVisibleOnAllWorkspaces","isVisibleOnAllWorkspaces",
-      "setIgnoreMouseEvents","setContentProtection","setFocusable","isFocusable","setParentWindow","getParentWindow","getChildWindows","setAutoHideCursor",
-      "selectPreviousTab","selectNextTab","showAllTabs","mergeAllWindows","moveTabToNewWindow","toggleTabBar","addTabbedWindow","setVibrancy",
-      "setBackgroundMaterial","setWindowButtonPosition","getWindowButtonPosition","setTouchBar","setBrowserView","getBrowserView","addBrowserView",
-      "removeBrowserView","setTopBrowserView","getBrowserViews","setTitleBarOverlay"]
-    
-    if(response.success) {
+    const windowMethods = ["destroy", "close", "focus", "blur", "isFocused", "isDestroyed", "show", "showInactive", "hide", "isVisible", "isModal", "maximize", "unmaximize",
+      "isMaximized", "minimize", "restore", "isMinimized", "setFullScreen", "isFullScreen", "setSimpleFullScreen", "isSimpleFullScreen", "isNormal", "setAspectRatio",
+      "setBackgroundColor", "previewFile", "closeFilePreview", "setBounds", "getBounds", "getBackgroundColor", "setContentBounds", "getContentBounds", "getNormalBounds",
+      "setEnabled", "isEnabled", "setSize", "getSize", "setContentSize", "getContentSize", "setMinimumSize", "getMinimumSize", "setMaximumSize", "getMaximumSize",
+      "setResizable", "isResizable", "setMovable", "isMovable", "setMinimizable", "isMinimizable", "setMaximizable", "isMaximizable", "setFullScreenable",
+      "isFullScreenable", "setClosable", "isClosable", "setHiddenInMissionControl", "isHiddenInMissionControl", "setAlwaysOnTop", "isAlwaysOnTop", "moveAbove", "moveTop",
+      "center", "setPosition", "getPosition", "setTitle", "getTitle", "setSheetOffset", "flashFrame", "setSkipTaskbar", "setKiosk", "isKiosk", "isTabletMode",
+      "getMediaSourceId", "getNativeWindowHandle", "hookWindowMessage", "isWindowMessageHooked", "unhookWindowMessage", "unhookAllWindowMessages",
+      "setRepresentedFilename", "getRepresentedFilename", "setDocumentEdited", "isDocumentEdited", "focusOnWebView", "blurWebView", "capturePage", "loadURL", "loadFile",
+      "reload", "setMenu", "removeMenu", "setProgressBar", "setOverlayIcon", "invalidateShadow", "setHasShadow", "hasShadow", "setOpacity", "getOpacity", "setShape",
+      "setThumbarButtons", "setThumbnailClip", "setThumbnailToolTip", "setAppDetails", "showDefinitionForSelection", "setIcon", "setWindowButtonVisibility",
+      "setAutoHideMenuBar", "isMenuBarAutoHide", "setMenuBarVisibility", "isMenuBarVisible", "setVisibleOnAllWorkspaces", "isVisibleOnAllWorkspaces",
+      "setIgnoreMouseEvents", "setContentProtection", "setFocusable", "isFocusable", "setParentWindow", "getParentWindow", "getChildWindows", "setAutoHideCursor",
+      "selectPreviousTab", "selectNextTab", "showAllTabs", "mergeAllWindows", "moveTabToNewWindow", "toggleTabBar", "addTabbedWindow", "setVibrancy",
+      "setBackgroundMaterial", "setWindowButtonPosition", "getWindowButtonPosition", "setTouchBar", "setBrowserView", "getBrowserView", "addBrowserView",
+      "removeBrowserView", "setTopBrowserView", "getBrowserViews", "setTitleBarOverlay"]
+
+    if (response.success) {
       let winId = response.result.winId;
       const obj = {
         ...response.result,
-        webContents:{
+        webContents: {
           // 添加窗口事件监听方法
           on: (eventName, callback) => {
             const eventKey = generateEventKey(eventName, winId);
-            console.log('set eventKey',eventKey)
+            console.log('set eventKey', eventKey)
             if (!windowEventListeners.has(eventKey)) {
               windowEventListeners.set(eventKey, new Set());
             }
@@ -259,41 +259,41 @@ contextBridge.exposeInMainWorld('windowManager', {
       method: '_openModalWindow',
       args: [parentWinId, windowPath, options]
     });
-    
+
     // 复用现有的窗口属性和方法处理逻辑
     let windowProperties = [
       // 'webContents',      
-      'id',   'tabbingIdentifier',    'autoHideMenuBar', 'simpleFullScreen',     'fullScreen',
+      'id', 'tabbingIdentifier', 'autoHideMenuBar', 'simpleFullScreen', 'fullScreen',
       'focusable',
-      'visibleOnAllWorkspaces',      'shadow',
-      'menuBarVisible',      'kiosk',
-      'documentEdited',      'representedFilename',      'title',      'minimizable',
-      'maximizable',      'fullScreenable',      'resizable',      'closable',      'movable',   
-         'excludedFromShownWindowsMenu',      'accessibleTitle'
+      'visibleOnAllWorkspaces', 'shadow',
+      'menuBarVisible', 'kiosk',
+      'documentEdited', 'representedFilename', 'title', 'minimizable',
+      'maximizable', 'fullScreenable', 'resizable', 'closable', 'movable',
+      'excludedFromShownWindowsMenu', 'accessibleTitle'
     ];
-    let windowMethods = ["destroy","close","focus","blur","isFocused","isDestroyed","show","showInactive","hide","isVisible","isModal","maximize","unmaximize",
-      "isMaximized","minimize","restore","isMinimized","setFullScreen","isFullScreen","setSimpleFullScreen","isSimpleFullScreen","isNormal","setAspectRatio",
-      "setBackgroundColor","previewFile","closeFilePreview","setBounds","getBounds","getBackgroundColor","setContentBounds","getContentBounds","getNormalBounds",
-      "setEnabled","isEnabled","setSize","getSize","setContentSize","getContentSize","setMinimumSize","getMinimumSize","setMaximumSize","getMaximumSize",
-      "setResizable","isResizable","setMovable","isMovable","setMinimizable","isMinimizable","setMaximizable","isMaximizable","setFullScreenable",
-      "isFullScreenable","setClosable","isClosable","setHiddenInMissionControl","isHiddenInMissionControl","setAlwaysOnTop","isAlwaysOnTop","moveAbove","moveTop",
-      "center","setPosition","getPosition","setTitle","getTitle","setSheetOffset","flashFrame","setSkipTaskbar","setKiosk","isKiosk","isTabletMode",
-      "getMediaSourceId","getNativeWindowHandle","hookWindowMessage","isWindowMessageHooked","unhookWindowMessage","unhookAllWindowMessages",
-      "setRepresentedFilename","getRepresentedFilename","setDocumentEdited","isDocumentEdited","focusOnWebView","blurWebView","capturePage","loadURL","loadFile",
-      "reload","setMenu","removeMenu","setProgressBar","setOverlayIcon","invalidateShadow","setHasShadow","hasShadow","setOpacity","getOpacity","setShape",
-      "setThumbarButtons","setThumbnailClip","setThumbnailToolTip","setAppDetails","showDefinitionForSelection","setIcon","setWindowButtonVisibility",
-      "setAutoHideMenuBar","isMenuBarAutoHide","setMenuBarVisibility","isMenuBarVisible","setVisibleOnAllWorkspaces","isVisibleOnAllWorkspaces",
-      "setIgnoreMouseEvents","setContentProtection","setFocusable","isFocusable","setParentWindow","getParentWindow","getChildWindows","setAutoHideCursor",
-      "selectPreviousTab","selectNextTab","showAllTabs","mergeAllWindows","moveTabToNewWindow","toggleTabBar","addTabbedWindow","setVibrancy",
-      "setBackgroundMaterial","setWindowButtonPosition","getWindowButtonPosition","setTouchBar","setBrowserView","getBrowserView","addBrowserView",
-      "removeBrowserView","setTopBrowserView","getBrowserViews","setTitleBarOverlay"
+    let windowMethods = ["destroy", "close", "focus", "blur", "isFocused", "isDestroyed", "show", "showInactive", "hide", "isVisible", "isModal", "maximize", "unmaximize",
+      "isMaximized", "minimize", "restore", "isMinimized", "setFullScreen", "isFullScreen", "setSimpleFullScreen", "isSimpleFullScreen", "isNormal", "setAspectRatio",
+      "setBackgroundColor", "previewFile", "closeFilePreview", "setBounds", "getBounds", "getBackgroundColor", "setContentBounds", "getContentBounds", "getNormalBounds",
+      "setEnabled", "isEnabled", "setSize", "getSize", "setContentSize", "getContentSize", "setMinimumSize", "getMinimumSize", "setMaximumSize", "getMaximumSize",
+      "setResizable", "isResizable", "setMovable", "isMovable", "setMinimizable", "isMinimizable", "setMaximizable", "isMaximizable", "setFullScreenable",
+      "isFullScreenable", "setClosable", "isClosable", "setHiddenInMissionControl", "isHiddenInMissionControl", "setAlwaysOnTop", "isAlwaysOnTop", "moveAbove", "moveTop",
+      "center", "setPosition", "getPosition", "setTitle", "getTitle", "setSheetOffset", "flashFrame", "setSkipTaskbar", "setKiosk", "isKiosk", "isTabletMode",
+      "getMediaSourceId", "getNativeWindowHandle", "hookWindowMessage", "isWindowMessageHooked", "unhookWindowMessage", "unhookAllWindowMessages",
+      "setRepresentedFilename", "getRepresentedFilename", "setDocumentEdited", "isDocumentEdited", "focusOnWebView", "blurWebView", "capturePage", "loadURL", "loadFile",
+      "reload", "setMenu", "removeMenu", "setProgressBar", "setOverlayIcon", "invalidateShadow", "setHasShadow", "hasShadow", "setOpacity", "getOpacity", "setShape",
+      "setThumbarButtons", "setThumbnailClip", "setThumbnailToolTip", "setAppDetails", "showDefinitionForSelection", "setIcon", "setWindowButtonVisibility",
+      "setAutoHideMenuBar", "isMenuBarAutoHide", "setMenuBarVisibility", "isMenuBarVisible", "setVisibleOnAllWorkspaces", "isVisibleOnAllWorkspaces",
+      "setIgnoreMouseEvents", "setContentProtection", "setFocusable", "isFocusable", "setParentWindow", "getParentWindow", "getChildWindows", "setAutoHideCursor",
+      "selectPreviousTab", "selectNextTab", "showAllTabs", "mergeAllWindows", "moveTabToNewWindow", "toggleTabBar", "addTabbedWindow", "setVibrancy",
+      "setBackgroundMaterial", "setWindowButtonPosition", "getWindowButtonPosition", "setTouchBar", "setBrowserView", "getBrowserView", "addBrowserView",
+      "removeBrowserView", "setTopBrowserView", "getBrowserViews", "setTitleBarOverlay"
     ];
-    
-    if(response.success) {
+
+    if (response.success) {
       let winId = response.result.winId;
       const obj = {
         ...response.result,
-        webContents:{
+        webContents: {
           // 复用现有的事件处理方法
           on: (eventName, callback) => {
             const eventKey = generateEventKey(eventName, winId);
@@ -403,7 +403,7 @@ contextBridge.exposeInMainWorld('windowManager', {
       method: '_getAllWindow',
       args
     });
-    if(response.success) {
+    if (response.success) {
       return response.result;
     } else {
       throw new Error(response.error);
@@ -414,7 +414,7 @@ contextBridge.exposeInMainWorld('windowManager', {
       method: '_getWindowInfo',
       args
     });
-    if(response.success) {
+    if (response.success) {
       return response.result;
     } else {
       throw new Error(response.error);
@@ -471,11 +471,11 @@ contextBridge.exposeInMainWorld('windowManager', {
 });
 contextBridge.exposeInMainWorld('openWindow', async (windowId, options = {}) => {
   try {
-    const response = await ipcRenderer.invoke('window-manager-action', { 
+    const response = await ipcRenderer.invoke('window-manager-action', {
       method: '_openWindow',
       args: [windowId, options]
-     });
-    if(response.success) {
+    });
+    if (response.success) {
       return response.result;
     } else {
       throw new Error(response.error);

@@ -152,5 +152,49 @@ nodejs的内置包可以通过NodeJS.包名直接访问，比如：NodeJS.fs,如
 默认内置的electron版本是v23，是支持Win7及以上版本的。
 - 支持mac、Ubuntu吗？
 尚未测试。
+- 改动了需要编辑的代码后没有生效。
+请全部重新启动。以Main、NodeJS、PJS开头的语法发生改动后，有时候需要重启才能生效。
+- 以Main、NodeJS、PJS开头的语法所调用的函数内部不能再使用以Main、NodeJS、PJS开头的语法为参数。
+```javascript
+//错误的写法
+const result = await Main.dialog.showOpenDialog({
+    title: '选择一个或多个文件',
+    defaultPath: await Main.app.getPath('documents'), // 示例：默认打开文档目录
+    buttonLabel: '选择',
+    filters: [
+        { name: '图片文件', extensions: ['jpg', 'png', 'gif'] },
+        { name: '文本文件', extensions: ['txt', 'md'] },
+        { name: '所有文件', extensions: ['*'] }
+    ],
+    properties: ['openFile', 'multiSelections', 'showHiddenFiles'] // 允许选择文件、允许多选、显示隐藏文件
+});
+//正确的写法
+let documentsPath = await Main.app.getPath('documents');
+const result = await Main.dialog.showOpenDialog({
+    title: '选择一个或多个文件',
+    defaultPath: documentsPath, // 示例：默认打开文档目录
+    buttonLabel: '选择',
+    filters: [
+        { name: '图片文件', extensions: ['jpg', 'png', 'gif'] },
+        { name: '文本文件', extensions: ['txt', 'md'] },
+        { name: '所有文件', extensions: ['*'] }
+    ],
+    properties: ['openFile', 'multiSelections', 'showHiddenFiles'] // 允许选择文件、允许多选、显示隐藏文件
+});
+//错误的写法
+await NodeJS.path.join(await NodeJS.os.homedir(), 'my_test_document.txt')
+//正确的写法
+let documentsPath = await NodeJS.os.homedir();
+await NodeJS.path.join(documentsPath,'my_test_document.txt')
+```
+- 不能以别名方式引入组件或文件。
+```javascript 
+//正确的引入
+import {getDocumentsPath2} from '../utils/api/utils.js';
+//错误的引入
+import {getDocumentsPath2} from '@/utils/api/utils.js';
+```
+
 ## 许可证
 - 永久免费使用、保留版权前提下可以用于商业用途。
+- MixOne is licensed under MIT + Commons Clause
