@@ -34,7 +34,7 @@
   "engines": {
     "node": ">=16.0.0"
   },
-  "devDependencies": {
+  "dependencies": {
     "@babel/generator": "^7.26.10",
     "@babel/parser": "^7.26.10",
     "@babel/traverse": "^7.26.10",
