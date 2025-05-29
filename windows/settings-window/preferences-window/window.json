@@ -1,0 +1,13 @@
+{
+    "name": "preferences",
+    "title": "偏好设置",
+    "width": 600,
+    "height": 400,
+    "frame": true,
+    "resizable": true,
+    "webPreferences": {
+        "nodeIntegration": true,
+        "contextIsolation": true,
+        "preload": "./preload.js"
+    }
+} 

@@ -1,13 +1,12 @@
-# MixOne
-
-## 简介
+## MixOne简介
 MixOne是一个软件开发脚手架，编写一套代码可以构建BS架构应用和CS架构应用。它以HTML5、JavaScript为主要技术栈，基于electron实现，项目结构精简，随意位置可以编写访问系统级API的代码。
+-  LOGO
+![项目LOGO](./logo2.png)
 - 特色：
     - 支持打包 BS（Browser/Server）浏览器应用。
     - 支持打包 CS（Client/Server）桌面应用，包括window、liunx和mac。
     - 打包BS架构的web应用支持多html页面，每个html保持支持多组件页面。
 - 设计理念：去概念化，给开发者节约精力，专注自己的业务和功能代码。
-
 ## 特性——独一无二的设计
 - 精简的项目结构，一看就懂，让各种水平的开发者都能接受。
 - 弱化主进程和渲染进程的概念，不增加开发者负担。
@@ -67,7 +66,7 @@ MixOne的核心优势在于真正实现了"去概念化"设计理念，让开发
 npm install mixone -g
 //创建项目
 mixone create mixone-demo1
-cd demo1
+cd mixone-demo1
 npm install //安装依赖 或 yarn
 npm run dev
 ```
@@ -98,8 +97,8 @@ npm run dev
 - API 调用方式
   - 使用“// @mainProcess”注释声明函数访问了系统API。可以在所有js文件中注释、也可以在vue组件中注释。
   - 使用Main标识符号直接访问Electron的API，方便更快捷（开发中）。
-  - 使用MainJS标识符访问原生插件（开发中）。
-  - 使用NodeJS访问nodejs的包（开发中）。
+  - 使用PJS标识符访问原生插件。
+  - 使用NodeJS访问nodejs的包。
 - 窗口管理
   - 创建窗口。
   - 创建窗口的子modal窗口。
@@ -121,7 +120,7 @@ npm run dev
 - 支持vue吗？
 支持。默认选择vue2.7.16版本，对新浏览器和旧浏览器都支持，并且支持Vue3的组合式API。
 - 支持typescript吗？
-不支持。
+vue2本身不支持。将来引入的其他库可能支持。敬请期待...
 - 如何访问Election的API
 主要是指访问Election Main Process API，翻阅electron文档找到使用方法。记得使用了Election API的函数要进行注释。
 - 如何访问NodeJS的包
@@ -132,6 +131,9 @@ nodejs的内置包可以通过NodeJS.包名直接访问，比如：NodeJS.fs,如
 尚未测试。
 - 改动了需要编辑的代码后没有生效。
 请全部重新启动。以Main、NodeJS、PJS开头的语法发生改动后，有时候需要重启才能生效。
+- 以Main、NodeJS、PJS开头的语法前的await可以不用写吗？
+必须写await，并且所在函数应该是async函数。
+- 使用“// @mainProcess”注释的函数内不要使用以Main、NodeJS、PJS开头的语法。
 - 以Main、NodeJS、PJS开头的语法所调用的函数内部不能再使用以Main、NodeJS、PJS开头的语法为参数。
 ```javascript
 //错误的写法
@@ -172,7 +174,13 @@ import {getDocumentsPath2} from '../utils/api/utils.js';
 //错误的引入
 import {getDocumentsPath2} from '@/utils/api/utils.js';
 ```
-
+## 未来计划
+- 支持vue3
+- 支持react
+- 支持typescript
+- 创建可选更多UI库，比如element-plus，当前内置ant-design-vue。
+- 支持electron-builder
+- 支持选择更多的electron版本
 ## 许可证
 - 永久免费使用、保留版权前提下可以用于商业用途。
 - MixOne is licensed under MIT + Commons Clause

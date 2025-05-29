@@ -251,8 +251,7 @@ class WindowManager {
         console.log(' preloadPath:', windowOptions.webPreferences.preload);
         console.log(`🔍 开发模式加载: ${windowUrl}`);
         await win.loadURL(windowUrl);
-        
-        win.webContents.openDevTools();
+        // win.webContents.openDevTools();
       } else {
         console.log('⚠️ 未找到开发服务器URL，使用文件加载模式');
         await win.loadFile(path.join(__dirname, '../windows', windowConfig.name, 'index.html'));

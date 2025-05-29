@@ -45,7 +45,7 @@ class FileWatcher {
   async close() {
     if (this.watcher) {
       await this.watcher.close();
-      console.log('✅ 已关闭文件监听器');
+      // console.log('✅ 已关闭文件监听器');
     }
   }
 }
@@ -122,43 +122,86 @@ console.log(`是否启动 Electron: ${shouldLaunchElectron}`);
 console.log(`是否自动打开浏览器: ${shouldOpen}`);
 
 let electronStarted = false;
-let electronProcess = null;
+// let electronProcess = null;
 let viteProcess = null;
-
+function killProcessOnPort(port) {
+  const { exec } = require('child_process');
+  exec(`netstat -ano | findstr :${port}`, (err, stdout, stderr) => {
+    if (err || !stdout) {
+      console.log(`未找到占用端口 ${port} 的进程`);
+      return;
+    }
+    // 解析 PID
+    const lines = stdout.trim().split('\n');
+    const pids = new Set();
+    lines.forEach(line => {
+      const parts = line.trim().split(/\s+/);
+      const pid = parts[parts.length - 1];
+      if (pid && !isNaN(pid)) {
+        pids.add(pid);
+      }
+    });
+    if (pids.size === 0) {
+      console.log(`未找到占用端口 ${port} 的进程`);
+      return;
+    }
+    // 杀掉所有相关进程
+    pids.forEach(pid => {
+      if(pid==0){
+        return;
+      }
+      exec(`taskkill /F /PID ${pid}`, (killErr) => {
+        if (killErr) {
+          // console.log(`杀掉进程 ${pid} 失败: ${killErr.message}`);
+        } else {
+          // console.log(`成功杀掉占用端口 ${port} 的进程 PID: ${pid}`);
+        }
+      });
+    });
+  });
+}
 // 清理进程的函数
 async function cleanup() {
-  console.log('开始清理进程...');
+  // console.log('开始清理进程...');
   // 关闭文件监听器
   if (fileWatcher) {
     await fileWatcher.close();
   }
   await electronManager.stop(); // 使用管理器停止
   // 如果 Electron 进程存在，杀掉它
-  if (electronProcess) {
-    try {
-      process.kill(electronProcess.pid);
-      console.log('✅ Electron 进程已清理');
-    } catch (err) {
-      console.log(`清理 Electron 进程失败: ${err.message}`);
-    }
-  }
-
+  // if (electronProcess) {
+  //   try {
+  //     process.kill(electronProcess.pid);
+  //     console.log('✅ Electron 进程已清理');
+  //   } catch (err) {
+  //     console.log(`清理 Electron 进程失败: ${err.message}`);
+  //   }
+  // }
+  
   // 查找并杀死所有相关的 node 进程
-  try {
-    // Windows 下使用 taskkill 命令
-    exec('taskkill /F /IM node.exe', (error, stdout, stderr) => {
-      if (error) {
-        console.log(`清理 node 进程失败: ${error.message}`);
-        return;
-      }
-      console.log('✅ node 进程已清理');
-    });
-  } catch (err) {
-    console.log(`执行清理命令失败: ${err.message}`);
-  }
+  // try {
+  //   // Windows 下使用 taskkill 命令
+  //   exec('taskkill /F /IM node.exe', (error, stdout, stderr) => {
+  //     if (error) {
+  //       console.log(`清理 node 进程失败: ${error.message}`);
+  //       return;
+  //     }
+  //     console.log('✅ node 进程已清理');
+  //   });
+  // } catch (err) {
+  //   console.log(`执行清理命令失败fail 123: ${err.message}`);
+  // }
   
   // 尝试删除 dev-server.json
   const serverInfoPath = path.resolve(process.cwd(), 'main/dev-server.json');
+  if (fs.existsSync(serverInfoPath)) {
+    const content = fs.readFileSync(serverInfoPath, 'utf-8');
+    const json = JSON.parse(content);
+    const url = json.url; // 例如 "http://localhost:5174"
+    const port = url.match(/:(\d+)/) ? url.match(/:(\d+)/)[1] : null;
+    killProcessOnPort(port);
+  }
+
   if (fs.existsSync(serverInfoPath)) {
     try {
       fs.unlinkSync(serverInfoPath);
@@ -167,7 +210,6 @@ async function cleanup() {
       console.log(`删除 dev-server.json 失败: ${err.message}`);
     }
   }
-
   // 确保所有进程都有时间被清理
   await new Promise(resolve => setTimeout(resolve, 1000));
 }

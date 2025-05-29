@@ -7,7 +7,20 @@ const { spawn } = require('child_process');
 const cwd = process.cwd();
 // 获取命令行参数
 const [command, ...args] = process.argv.slice(2);
-
+// 新增：支持多种版本号命令
+const VERSION_COMMANDS = ['-v', '-V', '-version', 'version'];
+if (VERSION_COMMANDS.includes(command)) {
+  // 读取 package.json 并输出 version
+  const pkgPath = path.join(__dirname, 'package.json');
+  try {
+    const pkg = JSON.parse(fs.readFileSync(pkgPath, 'utf-8'));
+    console.log(pkg.version);
+  } catch (e) {
+    console.error('无法读取版本号:', e.message);
+    process.exit(1);
+  }
+  process.exit(0);
+}
 // 支持的命令列表
 const VALID_COMMANDS = ['create', 'compile', 'dev', 'serve', 'package', 'build'];
 
@@ -20,6 +33,7 @@ if (!command || !VALID_COMMANDS.includes(command)) {
   console.log('  mixone serve    启动服务');
   console.log('  mixone package  打包应用');
   console.log('  mixone build    构建项目');
+  console.log('  mixone -v    查看版本号');
   process.exit(1);
 }
 
