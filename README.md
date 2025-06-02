@@ -9,7 +9,7 @@
 ## 特性——独一无二的设计
 - 精简的项目结构，一看就懂，让各种水平的开发者都能接受。
 - 弱化主进程和渲染进程的概念，不增加开发者负担。
-- 随意位置访问系统API的设计（Election API和NodeJS包），开发随心所欲，得心应手，减轻注意主宣进程的包袱。
+- 随意位置访问系统API的设计（Election API和NodeJS包），开发随心所欲，得心应手，减轻注意主宣进程的包袱。通过编译机制实现，不存在官方提到的安全问题。
 - 双模式打包（桌面应用/Web应用）
 - 这是多页面打包，SEO和强大的MVVM应用兼得。
 - 主进程代码内容变化自动加载，省去手动重启的麻烦。
@@ -134,6 +134,7 @@ nodejs的内置包可以通过NodeJS.包名直接访问，比如：NodeJS.fs,如
 必须写await，并且所在函数应该是async函数。
 - 使用“// @mainProcess”注释的函数内不要使用以Main、NodeJS、PJS开头的语法。
 - 以Main、NodeJS、PJS开头的语法所调用的函数内部不能再使用以Main、NodeJS、PJS开头的语法为参数。
+是否存在官方所说的安全性问题？mixone是一个编译工具，你在渲染进程访问主进程API的代码以及NodeJS代码都是按照安全机制实现和编译的。
 ```javascript
 //错误的写法
 const result = await Main.dialog.showOpenDialog({
