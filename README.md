@@ -1,11 +1,10 @@
 ## MixOne简介
-MixOne是一个软件开发脚手架，编写一套代码可以构建BS架构应用和CS架构应用。它以HTML5、JavaScript为主要技术栈，基于electron实现，项目结构精简，随意位置可以编写访问系统级API的代码。
--  LOGO
-![项目LOGO](./logo2.png)
-- 特色：
-    - 支持打包 BS（Browser/Server）浏览器应用。
-    - 支持打包 CS（Client/Server）桌面应用，包括window、liunx和mac。
-    - 打包BS架构的web应用支持多html页面，每个html保持支持多组件页面。
+**MixOne是一个桌面开发脚手架工具，编写一套代码可以构建BS架构应用和CS架构应用。它以HTML5、JavaScript为主要技术栈，基于electron实现，项目结构精简，随意位置可以编写访问系统级API的代码。**
+<p align="center"><a rel="noopener noreferrer"><img width="100" src="logo2.png" alt="MixOne logo"></a></p>
+
+- 支持打包 BS（Browser/Server）浏览器应用。
+- 支持打包 CS（Client/Server）桌面应用，包括window、liunx和mac。
+- 打包BS架构的web应用支持多html页面，每个html保持支持多组件页面。
 - 设计理念：去概念化，给开发者节约精力，专注自己的业务和功能代码。
 ## 特性——独一无二的设计
 - 精简的项目结构，一看就懂，让各种水平的开发者都能接受。
@@ -41,7 +40,7 @@ MixOne是一个软件开发脚手架，编写一套代码可以构建BS架构应
   - MixOne通过Electron实现跨平台，支持window、linux和mac
   - Qt通过自身框架实现跨平台
 ### MixOne与其他electron框架的对比。
-
+<p align="center"><a rel="noopener noreferrer"><img width="100%" src="new_old_grammer2.png" alt="新旧语法对比"></a></p>
 MixOne在electron应用开发框架中具有以下独特优势：
 
 | 特性 | MixOne | 其他Electron框架 |
