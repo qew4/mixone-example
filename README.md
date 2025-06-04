@@ -134,7 +134,8 @@ nodejs的内置包可以通过NodeJS.包名直接访问，比如：NodeJS.fs,如
 必须写await，并且所在函数应该是async函数。
 - 使用“// @mainProcess”注释的函数内不要使用以Main、NodeJS、PJS开头的语法。
 - 以Main、NodeJS、PJS开头的语法所调用的函数内部不能再使用以Main、NodeJS、PJS开头的语法为参数。
-是否存在官方所说的安全性问题？mixone是一个编译工具，你在渲染进程访问主进程API的代码以及NodeJS代码都是按照安全机制实现和编译的。
+- 是否存在官方所说的安全性问题？
+mixone是一个编译工具，你在渲染进程访问主进程API的代码以及NodeJS代码都是按照安全机制实现和编译的。
 ```javascript
 //错误的写法
 const result = await Main.dialog.showOpenDialog({

@@ -2,7 +2,7 @@
     <div class="home">
         <h1>欢迎使用mixone开发桌面应用</h1>
         <p>这个窗口页面包含了一些新语法使用例子。</p>
-        <ul style="width: 100%;text-align: left;">
+        <ul style="width: 100%;text-align: left;box-sizing: border-box;">
             <li>
                 <h2>
                     窗口管理
