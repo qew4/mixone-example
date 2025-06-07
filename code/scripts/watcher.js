@@ -3,6 +3,8 @@ const path = require('path');
 const { spawnSync } = require('child_process');
 const watchManager = require('./watch-manager');
 const fs = require('fs');
+const { console } = require('inspector');
+const { isPageComponent, getWindowDirectory,generateWindowRouterScript } = watchManager;
 /**
  * 检查是否已经编译过
  * @returns {boolean} 是否已经编译过
@@ -91,7 +93,6 @@ function setupCompileWatcher(processFile, checkWindowDirPreload) {
   watcher.on('unlink', (srcPath) => {
     try {
       console.log(`🗑️ 检测到文件删除: ${srcPath}`);
-      
       if (!handlePreloadFile(srcPath, 'delete')) {
         const relativePath = path.relative(rootDir, srcPath);
         const outPath = path.join(outDir, relativePath);
@@ -107,6 +108,7 @@ function setupCompileWatcher(processFile, checkWindowDirPreload) {
           console.log(`✅ 已删除空的输出目录: ${path.relative(rootDir, outDirPath)}`);
         }
       }
+      
     } catch (error) {
       console.error(`❌ 删除输出文件失败: ${error.message}`);
     }
@@ -203,12 +205,24 @@ function setupServerWatcher(server) {
     if (!handlePreloadFile(filePath, 'add')) {
       handleFileChange(filePath);
     }
+    if(filePath.endsWith('.vue') && isPageComponent(filePath)){
+      let windowDir = getWindowDirectory(filePath);
+      let windowsDirSrc = path.resolve(rootDir,'windows');
+      const relativePath = path.relative(windowsDirSrc, windowDir);
+      const outWindowPath = path.join(outDir, 'windows', relativePath);
+      const windowFilePath = path.join(windowDir, 'router.js');
+      const staticFilePath = path.join(compileDir,'code','static_file','router.js');
+      const outWindowFilePath = path.join(outWindowPath, 'router.js');
+      if (!fs.existsSync(windowFilePath) && fs.existsSync(staticFilePath)) {//源目录不存在router.js，生成router.js（有则取源目录的）
+        const routerFileContent = generateWindowRouterScript(windowDir,staticFilePath);
+        fs.writeFileSync(outWindowFilePath, routerFileContent);
+      }
+    }
   });
 
   watcher.on('unlink', (srcPath) => {
     try {
       console.log(`🗑️ 检测到文件删除: ${srcPath}`);
-      
       if (!handlePreloadFile(srcPath, 'delete')) {
         const relativePath = path.relative(rootDir, srcPath);
         const outPath = path.join(outDir, relativePath);
@@ -222,6 +236,19 @@ function setupServerWatcher(server) {
         if (fs.existsSync(outDirPath) && fs.readdirSync(outDirPath).length === 0) {
           fs.rmdirSync(outDirPath);
           console.log(`✅ 已删除空的输出目录: ${path.relative(rootDir, outDirPath)}`);
+        }
+      }
+      if(srcPath.endsWith('.vue') && isPageComponent(srcPath)){
+        let windowDir = getWindowDirectory(srcPath);
+        let windowsDirSrc = path.resolve(rootDir,'windows');
+        const relativePath = path.relative(windowsDirSrc, windowDir);
+        const outWindowPath = path.join(outDir, 'windows', relativePath);
+        const windowFilePath = path.join(windowDir, 'router.js');
+        const staticFilePath = path.join(compileDir,'code','static_file','router.js');
+        const outWindowFilePath = path.join(outWindowPath, 'router.js');
+        if (!fs.existsSync(windowFilePath) && fs.existsSync(staticFilePath)) {//源目录不存在router.js，生成router.js（有则取源目录的）
+          const routerFileContent = generateWindowRouterScript(windowDir,staticFilePath);
+          fs.writeFileSync(outWindowFilePath, routerFileContent);
         }
       }
     } catch (error) {

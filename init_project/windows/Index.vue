@@ -2,7 +2,7 @@
     <div class="home">
         <h1>欢迎使用mixone开发桌面应用</h1>
         <p>这个窗口页面包含了一些新语法使用例子。</p>
-        <ul style="width: 100%;text-align: left;box-sizing: border-box;">
+        <ul style="width: 100%;text-align: left;">
             <li>
                 <h2>
                     窗口管理
@@ -22,6 +22,9 @@
                 <div class="btn-item">
                     <button @click="OpenGetWindowAttr">打开新窗口并立即最大化</button>
                 </div>
+				<div class="btn-item">
+				    <button @click="gotoRoutePage">子路由页面</button>
+				</div>
             </li>
             <li>
                 <h2>
@@ -193,6 +196,9 @@ export default {
         async PJSReadFile() {
             console.log(await PJS.WENJIAN.read());
         },
+		async gotoRoutePage(){
+			this.$router.push('/Hello.page')
+		},
         async openHelp() {
             // 这里可以添加打开偏好设置窗口的逻辑
             let winInfo = await window.windowManager.openWindow('/windows/help-window', {
