@@ -2,7 +2,7 @@
     "name": "help",
     "title": "帮助",
     "width": 800,
-    "height": 600,
+    "height": 900,
     "frame": true,
     "resizable": true,
     "webPreferences": {

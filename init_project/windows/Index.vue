@@ -1,6 +1,8 @@
 <template>
     <div class="home">
-        <h1>欢迎使用mixone开发桌面应用</h1>
+        <img :src="require('@/assets/images/logo2.png')" alt="mixone logo">
+        <h1>mixone让electron再次伟大！</h1>
+        <h1>mixone让vue再次伟大！</h1>
         <p>这个窗口页面包含了一些新语法使用例子。</p>
         <ul style="width: 100%;text-align: left;">
             <li>
@@ -64,6 +66,7 @@
 <script>
 import { fetchGitHub_viaProxy } from '../../utils/api/github.js';
 import {getDocumentsPath2} from '../utils/api/utils.js';
+
 export default {
     name: 'windowIndex',
     data() {
@@ -202,8 +205,8 @@ export default {
         async openHelp() {
             // 这里可以添加打开偏好设置窗口的逻辑
             let winInfo = await window.windowManager.openWindow('/windows/help-window', {
-                width: 800,
-                height: 600
+                width: 1200,
+                height: 900
             });
             console.log('Window created with ID(winInfo):', winInfo);
             winInfo.webContents.on(

@@ -179,9 +179,8 @@ import {getDocumentsPath2} from '@/utils/api/utils.js';
 - 支持vue3
 - 支持react
 - 支持typescript
-- 创建可选更多UI库，比如element-plus，当前内置ant-design-vue。
 - 支持electron-builder
-- 支持选择更多的electron版本
+
 ## 许可证
 - 永久免费使用、保留版权前提下可以用于商业用途。
 - MixOne is licensed under MIT + Commons Clause

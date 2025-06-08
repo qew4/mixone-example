@@ -1,6 +1,6 @@
 {
   "name": "mixone",
-  "version": "0.1.0-alpha.9",
+  "version": "0.1.0-alpha.10",
   "description": "A cross-platform desktop application framework that enables development using JavaScript, HTML5, Electron API and Node.js. Build Windows, macOS and Linux apps with Vue/React and system APIs - that's why we call it mixone.A powerful Electron development infrastructure that provides hot-reload, window management, and build optimization.",
   "bin": {
     "mixone": "cli.js"

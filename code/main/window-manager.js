@@ -168,15 +168,14 @@ class WindowManager {
     windowPath = windowPath == '/' ? 'windows' : windowPath.trim('/');
     windowPath = windowPath.indexOf('/') === -1 ? windowPath : path.join(...windowPath.split('/'));
     const windowJsonPath = path.join(process.cwd(), windowPath, 'window.json');
-    console.log('🚀 打开窗口...', windowJsonPath);
     const windowConfig = JSON.parse(fs.readFileSync(windowJsonPath, 'utf-8'));
     if (!windowConfig) {
       throw new Error(`Window config not found: ${windowPath}`);
     }
     const predictedId = this.lastWinId + 1;
-    
     windowConfig.webPreferences = windowConfig.webPreferences || {};
     const windowOptions = {
+      icon: path.join(__dirname, '../assets/favicon.ico'),
       ...windowConfig,
       ...options,
       webPreferences: {
@@ -228,8 +227,8 @@ class WindowManager {
       });
     });
 
-    const windowObjEvents = [
-     'page-title-updated','close','closed','query-session-end','session-end','unresponsive','responsive','blur','focus','show','hide','ready-to-show','maximize','unmaximize','minimize','restore','will-resize','resize','resized','will-move','move','moved','enter-full-screen','leave-full-screen','enter-html-full-screen','leave-html-full-screen','always-on-top-changed','app-command','swipe','rotate-gesture','sheet-begin','sheet-end','new-window-for-tab','system-context-menu' 
+    const windowObjEvents = [//,'closed' 在electron22以下转发不了
+     'page-title-updated','close','query-session-end','session-end','unresponsive','responsive','blur','focus','show','hide','ready-to-show','maximize','unmaximize','minimize','restore','will-resize','resize','resized','will-move','move','moved','enter-full-screen','leave-full-screen','enter-html-full-screen','leave-html-full-screen','always-on-top-changed','app-command','swipe','rotate-gesture','sheet-begin','sheet-end','new-window-for-tab','system-context-menu' 
     ]
     windowObjEvents.forEach(eventName => {
       win.on(eventName, (...args) => {
@@ -262,7 +261,7 @@ class WindowManager {
     }
     this.setupWindowCommunication(win, windowPath);
     win.on('closed', () => {
-      this.windows.delete(win.id);
+      // this.windows.delete(win.id);
     });
     win.webContents.on('destroyed', () => {
       this.windows.delete(win.id);
