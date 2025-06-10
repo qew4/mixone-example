@@ -68,6 +68,7 @@ npm run dev
   ```
   - Main常量语法。使用Main标识符号直接访问Electron的API，方便更快捷。
   ```
+  // app是 electron Main API，而getPath是该API下的方法
   await Main.app.getPath('documents')
   ```
   - PJS常量语法。使用PJS标识符访问原生插件(Plugin Javascript)。
@@ -77,11 +78,12 @@ npm run dev
   ```
   - NodeJS常量语法。使用NodeJS访问nodejs的包。
   ```
+  // os是NodeJS的一个内置包，所以不需要安装也能访问，但是如果访问的是一个第三方包，你就得提前把这个包通过npm install的方式安装上。
   const homeDirectory = await NodeJS.os.homedir();
   const filePathToRead = await NodeJS.path.join(homeDirectory, 'my_test_document.txt'); 
   ```
 ### 使用技巧：
-他们之间有着不同的使用场景。常量语法是访问一些简单的方法和属性、如果这些方法中含有回调函数、定时器等情况，那么它就可能报错，这时就该使用注释方式来实现去IPC通信语法。
+他们之间有着不同的使用场景。常量语法是访问一些简单的方法和属性、如果这些方法中含有回调函数、定时器等情况，那么它就可能报错，这时就该使用注释方式来实现去IPC通信语法。语法常量的使用不需要前提前暴露。
 ## mixone的窗口管理类
 - 窗口管理
   - 创建窗口。 
