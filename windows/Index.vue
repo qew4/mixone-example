@@ -1,6 +1,8 @@
 <template>
     <div class="home">
-        <h1>欢迎使用mixone开发桌面应用</h1>
+        <img :src="require('@/assets/images/logo2.png')" alt="mixone logo">
+        <h1>mixone让electron再次伟大！</h1>
+        <h1>mixone让vue再次伟大！</h1>
         <p>这个窗口页面包含了一些新语法使用例子。</p>
         <ul style="width: 100%;text-align: left;">
             <li>
@@ -22,6 +24,9 @@
                 <div class="btn-item">
                     <button @click="OpenGetWindowAttr">打开新窗口并立即最大化</button>
                 </div>
+				<div class="btn-item">
+				    <button @click="gotoRoutePage">子路由页面</button>
+				</div>
             </li>
             <li>
                 <h2>
@@ -41,6 +46,12 @@
                 <div class="btn-item">
                     <button @click="openFileDialog">打开对话框选择文件</button> 以Main开头语法“Main.dialog.showOpenDialog” 打开对话框选择文件
                 </div>
+                <div class="btn-item">
+                    <button @click="NodeJSReadFile">NodeJS读取文件</button>
+                </div>
+                <div class="btn-item">
+                    <button @click="PJSReadFile">访问插件</button>以PJS开头语法
+                </div>
             </li>
         </ul>
         
@@ -55,8 +66,9 @@
 <script>
 import { fetchGitHub_viaProxy } from '../../utils/api/github.js';
 import {getDocumentsPath2} from '../utils/api/utils.js';
+
 export default {
-    name: 'Home',
+    name: 'windowIndex',
     data() {
         return {
             result: '',
@@ -154,7 +166,7 @@ export default {
             }
         },
         // 1. 使用 NodeJS.fs.readFile 读取文件内容
-        async demoReadFile() {
+        async NodeJSReadFile() {
             try {
                 // 注意：在这个纯粹的 NodeJS.* 示例中，我们没有使用 Main.dialog.showOpenDialog。
                 // 文件路径需要预先知道，或者通过其他方式获取。
@@ -162,36 +174,39 @@ export default {
                 // 我们首先需要获取用户主目录的路径，可以使用 NodeJS.os.homedir()。
                 const homeDirectory = await NodeJS.os.homedir(); // 假设 NodeJS.os.homedir 已暴露
                 const filePathToRead = await NodeJS.path.join(homeDirectory, 'my_test_document.txt'); // 假设 NodeJS.path.join 已暴露
-
                 console.log(`尝试从以下路径读取文件: ${filePathToRead}`);
-
                 // 为了让这个例子能运行，我们先尝试写入一个测试文件。
                 // （如果文件已存在，这会覆盖它。在实际应用中请谨慎处理。）
                 try {
-                await NodeJS.fs.writeFile(filePathToRead, 'Hello from NodeJS.fs.writeFile!This is a test file.', 'utf-8');
-                console.log(`测试文件已写入到: ${filePathToRead}`);
+                    await NodeJS.fs.writeFileSync(filePathToRead, 'Hello from NodeJS.fs.writeFile!This is a test file.', 'utf-8');
+                    console.log(`测试文件已写入到: ${filePathToRead}`);
                 } catch (writeError) {
-                console.error(`写入测试文件失败 (这可能是预期之中的，如果权限不足等): ${writeError.message}`);
-                // 如果写入失败，读取操作很可能也会失败，除非文件已通过其他方式存在。
+                    console.error(`写入测试文件失败 (这可能是预期之中的，如果权限不足等): ${writeError.message}`);
+                    // 如果写入失败，读取操作很可能也会失败，除非文件已通过其他方式存在。
                 }
 
                 // 现在尝试读取文件
-                const fileContent = await NodeJS.fs.readFile(filePathToRead, 'utf-8');
+                const fileContent = await NodeJS.fs.readFileSync(filePathToRead, 'utf-8');
                 console.log(`文件 "${filePathToRead}" 的内容:`);
                 console.log(fileContent);
                 alert(`文件内容:\n${fileContent}`);
-
             } catch (error) {
                 console.error(`NodeJS.fs.readFile 操作失败: ${error.message}`);
                 let homedir = await NodeJS.os.homedir();
                 alert(`读取文件失败: ${error.message}\n请确保文件 "${await NodeJS.path.join(homedir, 'my_test_document.txt')}" 存在并且可读，或者写入操作成功。`);
             }
         },
+        async PJSReadFile() {
+            console.log(await PJS.WENJIAN.read());
+        },
+		async gotoRoutePage(){
+			this.$router.push('/Hello.page')
+		},
         async openHelp() {
             // 这里可以添加打开偏好设置窗口的逻辑
             let winInfo = await window.windowManager.openWindow('/windows/help-window', {
-                width: 800,
-                height: 600
+                width: 1200,
+                height: 900
             });
             console.log('Window created with ID(winInfo):', winInfo);
             winInfo.webContents.on(

@@ -1,47 +1,25 @@
 {
-  "name": "mixone",
-  "version": "0.1.0-alpha.10",
-  "description": "A cross-platform desktop application framework that enables development using JavaScript, HTML5, Electron API and Node.js. Build Windows, macOS and Linux apps with Vue/React and system APIs - that's why we call it mixone.A powerful Electron development infrastructure that provides hot-reload, window management, and build optimization.",
-  "bin": {
-    "mixone": "cli.js"
-  },
+  "name": "demo0",
+  "version": "0.0.1",
+  "private": true,
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "files": [
-    "*"
-  ],
-  "license": "MIT + Commons Clause",
-  "author": "qew4",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/qew4/mixone.git"
-  },
-  "keywords": [
-    "mixone",
-    "electron",
-    "desktop-framework",
-    "desktop-app",
-    "webview",
-    "hybrid-desktop",
-    "windows-app",
-    "macos-app",
-    "linux-app",
-    "html5-desktop",
-    "javascript-desktop",
-    "cross-platform"
-  ],
-  "engines": {
-    "node": ">=16.0.0"
+    "dev": "npm run compile && npm run serve:electron",
+    "compile": "mixone compile",
+    "serve:electron": "mixone serve --electron",
+    "build": "mixone build",
+    "preview": "mixone preview"
   },
   "dependencies": {
-    "@babel/generator": "^7.26.10",
-    "@babel/parser": "^7.26.10",
-    "@babel/traverse": "^7.26.10",
-    "@babel/types": "^7.26.10",
-    "adm-zip": "^0.5.16",
+    "electron": "^21.0.0",
+    "vue": "^2.7.16",
+    "vue-router": "^3.6.5",
+    "iconv-lite": "^0.6.3",
+    "ant-design-vue": "^1.7.8"
+  },
+  "devDependencies": {
     "chokidar": "^3.5.3",
-    "prompts": "^2.4.2",
-    "javascript-obfuscator": "^4.1.0"
+    "iconv-lite": "^0.6.3",
+    "@vitejs/plugin-vue2": "^2.3.3",
+    "vite": "^4.5.14"
   }
 }
