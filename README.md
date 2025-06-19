@@ -1,8 +1,10 @@
-## mixone-demo简介
-**mixone-demo是由mixone工具创建的electron桌面项目例子。该demo中列出了windowManger管理窗口类的example，通过去IPC通信的例子**
-在详细介绍本demo之前，我们先让大家了解以下mixone工具：它是开发electron的编译工具，将Nodejs的包和electron主进程API的使用集成到vue或react项目中，在需要使用的代码位置以Main、NodeJS、PJS开头即可访问，通过编译实现开发层面去IPC通信。去除IPC通信的语法后，项目目录结构便可与vue或react项目的目录结构相同，而不再需要区分主进程和渲染进程的冗余的目录层级，这就让我们的工程化目录结构比其他框架的目录结构更清晰、一目了然。
+## mixone-example简介
+**mixone-example是由mixone工具创建的electron桌面项目例子。该案例中列出了去除IPC通信代码的例子demo，列出了windowManger管理窗口类的部分用法demo**
 
-## 快速开始使用mixone
+## mixone介绍
+在详细介绍本案例之前，我们先让大家了解mixone工具：它是开发electron应用的编译工具，将Nodejs的包和electron主进程API的使用集成到vue或react项目中，在需要使用的代码位置以Main、NodeJS、PJS开头即可访问，通过编译实现开发层面去IPC通信。去除IPC通信的语法后，项目目录结构便可与vue或react项目的目录结构相同，而不再需要区分主进程和渲染进程的冗余的目录层级，这就让我们的工程化目录结构比其他框架的目录结构更清晰、一目了然。
+若在开发中碰到任何mixone问题，可以在此仓库提issues。或联系作者QQ：996150938
+## 创建mixone应用
 ### 使用mixone工具创建项目
 你可以选择自己的UI库、electron版本、vite版本等。
 ```
@@ -18,24 +20,52 @@ npm run dev
 ```
 npm install mixone -g
 //创建项目
-git clone https://github.com/qew4/mixone-demo.git
+git clone https://github.com/qew4/mixone-example.git
 cd mixone-demo
 npm install //安装依赖 或 yarn
 npm run dev
 ```
 ## mixone的项目结构
-- 目录结构
-![项目结构](./dir_structure.png)
+- 完整目录结构
+```
+your-mixone-project/              # 项目根目录
+├── assets/                       # 静态资源目录
+│   ├── favicon.ico               # 应用图标
+├── components/                   # 公共组件目录
+│   ├── Button.vue                # 按钮组件
+│   └── Dialog.vue                # 对话框组件
+├── windows/                      # 根窗口目录
+│   ├── Index.vue                 # 窗口入口
+│   └── other-window/             # 其他窗口，以“-window”结尾
+│       ├── Index.vue             # 窗口入口
+│       ├── Sencond.page.vue      # 页面组件，以“page.vue”结尾，自动加入router
+│       ├── Sencond.vue           # 普通组件
+│   └── setting-window/           # 设置窗口，以“-window”结尾
+│       ├── Index.vue             # 窗口入口
+│       ├── main.ts               # vue项目入口，非必须存在。
+│       ├── App.vue               # vue顶层组件，非必须存在。
+│       ├── router.js             # 路由组件，非必须存在。
+│       ├── window.json			  # 窗口默认配置，可被openWindow方法重置，非必须存在。
+│       ├── preload.js			  # 每一个窗口的预加载文件，可省略。可以自定义暴露自己的方法给窗口
+├── main/                         # 主进程代码
+│   ├── main.js                   # 主进程入口文件
+│   ├── Wenjian.fn.js             # 原生插件,以PJS开头进行访问。
+├── utils/                        # 工具函数目录
+│   ├── request.js                # 请求工具
+│   └── common.js                 # 通用工具函数
+├── out/                          # 编译输出目录
+└── package.json                  # 项目配置文件			
+```
 - 工程文件介绍
 	- 窗口目录
-		窗口目录是指在windows下的以“-window”结尾的目录（若不以“-window”结尾则为普通文件夹）。
-		- 窗口目录的特性：
-			* 窗口目录是可以嵌套窗口的。
-			* 窗口目录下默认是以Index.vue为访问入口。
-			* 窗口目录下分为页面组件和普通组件，页面组件以“page.vue”结尾，创建后会被mixone识别并加入到vue的路由配置中。
-			* 窗口目录下可以创建preload.js作为窗口的预加载文件，暴露自己定义的方法等功能。preload.js默认会自动创建、若在窗口目录下创建了preload.js则会自动与项目根目录的preload.js合并(如果根preload.js存在)。
-			* 窗口目录下的window.json可以配置窗口的属性，在多个位置打开窗口无需再重复编写相同的属性，不存在window.json则默认。
-			* 窗口目录下的assets文件夹是静态资源文件夹，当前窗口的组件使用。和全局有区别。
+		窗口目录是指在/windows下的以“-window”结尾的目录（若不以“-window”结尾则为普通文件夹），/windows本身就是根窗口目录。
+	- 窗目录的特性：
+		* 窗口目录是可以嵌套窗口的。
+		* 窗口目录下默认是以Index.vue为访问入口。
+		* 窗口目录下分为页面组件和普通组件，页面组件以“page.vue”结尾，创建后会被mixone识别并加入到vue的路由配置中。
+		* 窗口目录下可以创建preload.js作为窗口的预加载文件，暴露自己定义的方法等功能。preload.js默认会自动创建、若在窗口目录下创建了preload.js则会自动与项目根目录的preload.js合并(如果根preload.js存在)。
+		* 窗口目录下的window.json可以配置窗口的属性，在多个位置打开窗口无需再重复编写相同的属性，不存在window.json则默认。
+		* 窗口目录下的assets文件夹是静态资源文件夹，当前窗口的组件使用。和全局有区别。
 	- main.js
 	main/main.js文件是程序的主入口，里面默认就行，能不修改别修改。
 	- components
@@ -43,17 +73,22 @@ npm run dev
 	- assets是全局的静态资源目录，所有窗口共享。
 	- utils是全局的工具目录，所有窗口共享。不建议main目录下的js引用。
 - 窗口目录文件
-    - Index.vue 这是窗口入口的第一个页面。
-	- xxx.page.vue 这是页面组件。以次后缀结束的组件会被自动加入到vue路由
-	- xxx.vue普通组件
-	- window.json 窗口配置，在使用windowManger.openWindow打开窗口使用会被使用，可传参覆盖。
-	- router.js 默认无此文件，编译后自动创建。如果手动创建了此文件，xxx.page.vue的组件则不会自动加入路由，需要你自己配置路由。
-	- main.ts 默认无此文件，编译后自动创建。如果手动创建了此文件，可实现更多的vue项目配置。
-	- preload.js 默认无此文件，编译后自动创建。如果手动创建了此文件，可实现自己的窗口暴露方法。
-	- 其他目录
-	- 其他js文件
-## mixone的去IPC方法
-### 去IPC的四种方式
+```
+│———xxxx-window/           # 设置窗口，以“-window”结尾
+│       ├── Index.vue             # 窗口入口
+│       ├── Sencond.page.vue      # 以“page.vue”结尾的页面
+│       ├── main.ts               # 可省略。
+│       ├── App.vue               # 可省略。
+│       ├── router.js             # 可省略。
+│       ├── window.json			  # 可省略
+│       ├── preload.js 		  	  # 可省略
+
+```
+
+## mixone去IPC语法
+## 什么是去IPC通讯语法。
+IPC是进程之间通讯的意思，electron的主进程和渲染进程需要自己设计事件位置、事件名以及事件传输方向（主->渲,渲->主）。mixone要求把主进程API和nodejs的代码以四种方式写在业务代码的位置，mixone会将其语法编译为到主进程代码并符合electron的安全规范。从而实现开发层面去IPC通讯的语法，但是编译之后依旧以IPC通讯原理运行。
+### 去IPC的四种语法
   - 注释方式。使用“// @mainProcess”注释声明函数访问了系统API。可以在所有js文件中注释、也可以在vue组件中注释。
   ```
   // @mainProcess
@@ -188,6 +223,9 @@ await NodeJS.path.join(documentsPath,'my_test_document.txt')
 ```javascript 
 //正确的引入
 import {getDocumentsPath2} from '../utils/api/utils.js';
-//错误的引入
+//错误的引入（考虑升级支持）
 import {getDocumentsPath2} from '@/utils/api/utils.js';
 ```
+## 问题反馈群
+又问题请加微信进群。
+![项目结构](./qr-wechat.jpg)
