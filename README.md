@@ -227,5 +227,6 @@ import {getDocumentsPath2} from '../utils/api/utils.js';
 import {getDocumentsPath2} from '@/utils/api/utils.js';
 ```
 ## 问题反馈群
-又问题请加微信进群。
+- 有问题请加微信进群。
+
 ![项目结构](./qr-wechat.jpg)
