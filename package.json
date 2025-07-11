@@ -10,16 +10,17 @@
     "preview": "mixone preview"
   },
   "dependencies": {
+    "ant-design-vue": "^1.7.8",
     "electron": "^21.0.0",
+    "iconv-lite": "^0.6.3",
     "vue": "^2.7.16",
     "vue-router": "^3.6.5",
-    "iconv-lite": "^0.6.3",
-    "ant-design-vue": "^1.7.8"
+    "vuex": "^3.6.2"
   },
   "devDependencies": {
+    "@vitejs/plugin-vue2": "^2.3.3",
     "chokidar": "^3.5.3",
     "iconv-lite": "^0.6.3",
-    "@vitejs/plugin-vue2": "^2.3.3",
     "vite": "^4.5.14"
   }
 }

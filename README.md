@@ -2,7 +2,7 @@
 **mixone-example是由mixone工具创建的electron桌面项目例子。该案例中列出了去除IPC通信代码的例子demo，列出了windowManger管理窗口类的部分用法demo**
 
 ## mixone介绍
-在详细介绍本案例之前，我们先让大家了解mixone工具：它是开发electron应用的编译工具，将Nodejs的包和electron主进程API的使用集成到vue或react项目中，在需要使用的代码位置以Main、NodeJS、PJS开头即可访问，通过编译实现开发层面去IPC通信。去除IPC通信的语法后，项目目录结构便可与vue或react项目的目录结构相同，而不再需要区分主进程和渲染进程的冗余的目录层级，这就让我们的工程化目录结构比其他框架的目录结构更清晰、一目了然。
+在详细介绍本案例之前，我们先让大家了解mixone工具：它是开发electron应用的编译工具，使用到vite构建工具，将Nodejs的包和electron主进程API的使用集成到vue或react项目中，在需要使用的代码位置以Main、NodeJS、PJS开头即可访问，通过编译实现开发层面去IPC通信。去除IPC通信的语法后，项目目录结构便可与vue或react项目的目录结构相同，而不再需要区分主进程和渲染进程的冗余的目录层级，这就让我们的工程化目录结构比其他框架的目录结构更清晰、一目了然。
 若在开发中碰到任何mixone问题，可以在此仓库提issues。或联系作者QQ：996150938
 ## 创建mixone应用
 ### 使用mixone工具创建项目
@@ -85,10 +85,10 @@ your-mixone-project/              # 项目根目录
 
 ```
 
-## mixone去IPC语法
-## 什么是去IPC通讯语法。
+## mixone去IPC语法糖
+## 什么是去IPC通讯语法糖。
 IPC是进程之间通讯的意思，electron的主进程和渲染进程需要自己设计事件位置、事件名以及事件传输方向（主->渲,渲->主）。mixone要求把主进程API和nodejs的代码以四种方式写在业务代码的位置，mixone会将其语法编译为到主进程代码并符合electron的安全规范。从而实现开发层面去IPC通讯的语法，但是编译之后依旧以IPC通讯原理运行。
-### 去IPC的四种语法
+### 去IPC的四种语法糖
   - 注释方式。使用“// @mainProcess”注释声明函数访问了系统API。可以在所有js文件中注释、也可以在vue组件中注释。
   ```
   // @mainProcess
@@ -166,17 +166,17 @@ IPC是进程之间通讯的意思，electron的主进程和渲染进程需要自
 - 当碰到未知问题或其他方式已经无法解决时，怎么办？
 “npm run dev”重启应用是比较万能的解决方法，若还是无法解决，请在issues中提交问题，我们会尽快解决。
 - 支持react吗？
-考虑支持中，暂未实现。
+支持。
 - 支持vue吗？
-支持。默认选择vue2.7.16版本，对新浏览器和旧浏览器都支持，并且支持Vue3的组合式API。
+当前已支持vue2.7和vue3。
 - 支持typescript吗？
-vue2本身不支持。将来引入的其他库可能支持。敬请期待...
+vue3和react项目支持typescript
 - 如何访问Election的API
 主要是指访问Election Main Process API，翻阅electron文档找到使用方法。记得使用了Election API的函数要进行注释。
 - 如何访问NodeJS的包
 nodejs的内置包可以通过NodeJS.包名直接访问，比如：NodeJS.fs,如果是第三方的包需要提前安装。
 - 支持win7吗?
-默认内置的electron版本是v21，是支持Win7及以上版本的。
+初始化项目时候electron版本选择v21即可支持win7。
 - 支持mac、Ubuntu吗？
 尚未测试。
 - 改动了需要编辑的代码后没有生效。
@@ -219,11 +219,11 @@ await NodeJS.path.join(await NodeJS.os.homedir(), 'my_test_document.txt')
 let documentsPath = await NodeJS.os.homedir();
 await NodeJS.path.join(documentsPath,'my_test_document.txt')
 ```
-- 不能以别名方式引入组件或文件。
-```javascript 
-//正确的引入
-import {getDocumentsPath2} from '../utils/api/utils.js';
-//错误的引入（考虑升级支持）
+- 你可以使用别名方式引入文件的方法，支持的别名有@/utils、@/store、@/assets、@/windows、@/components、@/main。
+（preload.js和main/main.js中不能使用别名）
+```javascript
+//使用例子
+//在xxx.vue文件中 
 import {getDocumentsPath2} from '@/utils/api/utils.js';
 ```
 ## 问题反馈群
