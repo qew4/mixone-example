@@ -8,8 +8,8 @@
     "minimizable": true,
     "maximizable": true,
     "webPreferences": {
-        "nodeIntegration": true,
-        "contextIsolation": true
+        "nodeIntegration": false,
+        "contextIsolation": false
     },
-    "framework": "vue"
+    "framework": "vue2"
 } 

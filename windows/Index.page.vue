@@ -1,383 +1,442 @@
 <template>
-    <div class="home">
-        <img :src="require('@/assets/images/logo2.png')" alt="mixone logo">
-        <h1>mixone让electron再次伟大！</h1>
-        <h1>mixone让vue再次伟大！</h1>
-        <p>这个窗口页面包含了一些新语法使用例子。</p>
-        <ul style="width: 100%;text-align: left;">
-            <li>
-                <h2>
-                    窗口管理
-                </h2>
-                <div class="btn-item">
-                    <button @click="openHelp">打开帮助中心</button> 打开同级窗口
-                </div>
-                <div class="btn-item">
-                    <button @click="getWindowInfo">窗口信息</button> 获取窗口信息，根据窗口ID。
-                </div>
-                <div class="btn-item">
-                    <button @click="getOpenWindow">已打开的窗口</button> 如果同事打开多个同级以及子窗口，这个方法可以获取所有已打开的窗口。
-                </div>
-                <div class="btn-item">
-                    <button @click="openModalHelp">打开模态帮助窗口</button> 打开窗口是当前窗口的子窗口，该例子还实现了父窗口遮罩层。
-                </div>
-                <div class="btn-item">
-                    <button @click="OpenGetWindowAttr">打开新窗口并立即最大化</button>
-                </div>
-				<div class="btn-item">
-				    <button @click="gotoRoutePage">子路由页面</button>
-				</div>
-            </li>
-            <li>
-                <h2>
-                    新语法
-                </h2>
-                <div class="btn-item">
-                    <button @click="callGitHubAPI">获取 GitHub 数据</button>使用electron主进程的API之fetch获取接口数据的例子。在一个独立的导出utils函数中实现这样的功能，并在函数前加上注释“// @mainProcess”实现。
-                    <div class="result" v-if="result">{{ result }}</div>
-                </div>
-                <div class="btn-item">
-                    <button @click="getDocumentsPath">获取系统文档目录</button>使用以Main开始的语法:Main.app.getPath('documents'); 获取系统documents目录,写在method方法内。
-                    <div class="result" v-if="getDocumentsPathResult">{{ getDocumentsPathResult }}</div>
-                </div>
-                <div class="btn-item">
-                    <button @click="getDocumentsPath2">获取系统文档目录 方式二</button> 使用以Main开始的语法:Main.app.getPath('documents'); 获取系统documents目录,写在utils中导入使用。
-                </div>
-                <div class="btn-item">
-                    <button @click="openFileDialog">打开对话框选择文件</button> 以Main开头语法“Main.dialog.showOpenDialog” 打开对话框选择文件
-                </div>
-                <div class="btn-item">
-                    <button @click="NodeJSReadFile">NodeJS读取文件</button>
-                </div>
-                <div class="btn-item">
-                    <button @click="PJSReadFile">访问插件</button>以PJS开头语法
-                </div>
-            </li>
-        </ul>
-        
-       
-        <div id="statusResult">窗口打开后立即获取{{ statusResult }}</div>
-        <div id="status">{{ status }}</div>
-        <!-- 新增遮罩层 -->
-        <div v-if="showModalOverlay" class="modal-overlay"></div>
+  <div class="app-container">
+    <!-- 左侧菜单 -->
+    <div class="sidebar">
+      <div class="logo">
+        <h2>MixOne</h2>
+      </div>
+      <nav class="nav-menu">
+        <div 
+          class="nav-item" 
+          :class="{ active: activeTab === 'home' }"
+          @click="activeTab = 'home'"
+        >
+          <i class="icon">🏠</i>
+          <span>首页</span>
+        </div>
+        <div 
+          class="nav-item" 
+          :class="{ active: activeTab === 'syntax' }"
+          @click="activeTab = 'syntax'"
+        >
+          <i class="icon">🍬</i>
+          <span>语法糖</span>
+        </div>
+        <div 
+          class="nav-item" 
+          :class="{ active: activeTab === 'window' }"
+          @click="activeTab = 'window'"
+        >
+          <i class="icon">🪟</i>
+          <span>窗口管理</span>
+        </div>
+      </nav>
     </div>
-</template>
 
-<script>
-import { fetchGitHub_viaProxy } from '../../utils/api/github.js';
-import {getDocumentsPath2} from '../utils/api/utils.js';
+    <!-- 右侧内容区域 -->
+    <div class="main-content">
+      <!-- 首页内容 -->
+      <div v-if="activeTab === 'home'" class="content-section">
+        <h1>欢迎使用 MixOne 工具</h1>
+        <div class="intro-card">
+          <h3>🚀 关于 MixOne</h3>
+          <p>MixOne 是一个强大的 Electron + Vue 开发工具，旨在提供高效的桌面应用开发体验。</p>
+          
+          <h4>✨ 主要特性</h4>
+          <ul>
+            <li><strong>现代化架构</strong> - 基于 Electron + Vue 2/3 构建</li>
+            <li><strong>热重载支持</strong> - 开发过程中实时预览更改</li>
+            <li><strong>多窗口管理</strong> - 灵活的窗口创建和管理机制</li>
+            <li><strong>语法糖支持</strong> - 提供丰富的开发语法糖，提升开发效率</li>
+            <li><strong>跨平台兼容</strong> - 支持 Windows、macOS、Linux</li>
+          </ul>
 
-export default {
-    name: 'windowIndex',
-    data() {
-        return {
-            result: '',
-            status: '',
-            statusResult: '',
-            getDocumentsPathResult: '',
-            showModalOverlay: false,
-        }
-    },
-    mounted() {
-        let promise = this.testMainProcess('Hello from renderer3333!','arg222');
-        promise.then((statusResult) => {
-            this.statusResult = `系统状态: ${statusResult}`;
-        });
-        this.startMonitoringSystem();
-        // 在渲染进程中保存窗口ID
-        console.log('Window created with ID:', getWinId());
-        // this.openModalHelp();
-    },
-    methods: {
-        async getDocumentsPath() {
-            try {
-                let path = await Main.app.getPath('documents');
-                console.log('Selected getDocumentsPath:', path);
-                this.getDocumentsPathResult = path;
-            } catch (error) {
-                console.error('getDocumentsPath失败:', error);
-            }
-        },
-        async getDocumentsPath2() {
-            try {
-                let path = await getDocumentsPath2();
-                console.log('Selected getDocumentsPath2:', path);
-            } catch (error) {
-                console.error('getDocumentsPath2失败:', error);
-            }
-        },
-        async showInfoMessage() {
-            try {
-                const result = await Main.dialog.showMessageBox({
-                type: 'info', // 'none', 'info', 'error', 'question', 'warning'
-                title: '提示信息',
-                message: '这是一个由主进程显示的信息对话框。',
-                detail: '更多细节可以放在这里。',
-                buttons: ['好的', '取消操作'] // 按钮数组
-                });
+          <h4>🛠️ 技术栈</h4>
+          <div class="tech-stack">
+            <span class="tech-tag">Electron</span>
+            <span class="tech-tag">Vue.js</span>
+            <span class="tech-tag">Node.js</span>
+            <span class="tech-tag">Vite</span>
+          </div>
+        </div>
+      </div>
 
-                console.log('showMessageBox 结果:', result);
-                // result.response 会是按钮数组的索引，例如 0 代表 '好的'
-                if (result.response === 0) {
-                console.log('用户点击了 "好的"');
-                } else {
-                console.log('用户点击了其他按钮或关闭了对话框');
-                }
-            } catch (error) {
-                console.error('显示信息消息框失败:', error);
-            }
+      <!-- 语法糖内容 -->
+      <div v-if="activeTab === 'syntax'" class="content-section">
+        <h1>语法糖使用案例</h1>
+        
+        <div class="example-card">
+            <h3>🍭 Vue 组件语法糖</h3>
+            <div class="code-example">
+                <h4>1. 获取系统的documents目录。 </h4>
+                <p>传统写法：</p>
+                <pre>
+    // 首先 要在主进程中监听请求。
+    const { app } = Require('electron')
+    let documentsPath = app.getPath('documents');
+    // 还需要在主进程监听渲染进程发送的事件
+    ipcMain.on('getDocuments', (event, arg) => {
+        // 回复渲染进程
+        event.reply('main-documents-reply', documentsPath);
+    });
+    // 其次 在渲染进程还需要监听响应回复的结果
+    ipcRenderer.on('main-documents-reply', (event, arg) => {
+    console.log('收到主进程回复:', arg);
+    });</pre>
+    <p>语法糖写法:</p>
+    <pre>
+    // 在项目的任意位置。
+    let documentsPath = await Main.app.getPath('documents');</pre>
+            </div>
+            <div class="code-example">
+                <h4>2. NodeJS读取文件。 </h4>
+                <p>传统写法：</p>
+                <pre>
+    // 首先 要在主进程中监听请求。
+    const os = Require('os');
+    const path = Require('path');
+    const fs = Require('fs');
+    const homeDirectory = os.homedir();
+    const filePathToRead = path.join(homeDirectory, 'my_test_document.txt');
+    const fileContent = fs.readFileSync(filePathToRead, 'utf-8');
+    // 还需要在主进程监听渲染进程发送的事件
+    ipcMain.on('getFileContent', (event, arg) => {
+        // 回复渲染进程
+        event.reply('main-documents-reply', fileContent);
+    });
+    // 其次 在渲染进程还需要监听响应回复的结果
+    ipcRenderer.on('main-file-content-reply', (event, arg) => {
+    console.log('收到主进程回复:', arg);
+    });</pre>
+    <p>语法糖写法:</p>
+    <pre>
+    const homeDirectory = await NodeJS.os.homedir();
+    const filePathToRead = await NodeJS.path.join(homeDirectory, 'my_test_document.txt');
+    const fileContent = await NodeJS.fs.readFileSync(filePathToRead, 'utf-8');</pre>
+            </div>
+            <div class="code-example">
+                            <h4>3. 访问插件。我写了一个插件在main目录下，以WENJIAN.fn.js命名</h4>
+                            <p>插件内容:</p>
+                            <pre>
+    // 插件代码
+    const WENJIAN = {
+        read: function () {
+            console.log('Electron version:', process.versions.electron);
+            console.log('Node.js version:', process.versions.node);
+            console.log('Chromium version:', process.versions.chrome);
+            return 'hello world';
         },
-        // 3. 显示打开文件对话框，并获取用户选择的文件路径
-        async openFileDialog() {
-            try {
-                let documentsPath = await Main.app.getPath('documents');
-                const result = await Main.dialog.showOpenDialog({
-                    title: '选择一个或多个文件',
-                    defaultPath: documentsPath, // 示例：默认打开文档目录
-                    buttonLabel: '选择',
-                    filters: [
-                        { name: '图片文件', extensions: ['jpg', 'png', 'gif'] },
-                        { name: '文本文件', extensions: ['txt', 'md'] },
-                        { name: '所有文件', extensions: ['*'] }
-                    ],
-                    properties: ['openFile', 'multiSelections', 'showHiddenFiles'] // 允许选择文件、允许多选、显示隐藏文件
-                });
-
-                console.log('showOpenDialog 结果:', result);
-                if (!result.canceled && result.filePaths.length > 0) {
-                console.log('用户选择的文件路径:', result.filePaths);
-                // 可以用这些路径进行后续操作，例如通过 Main.fs.readFile 读取文件
-                } else {
-                console.log('用户取消了文件选择');
-                }
-            } catch (error) {
-                console.error('打开文件对话框失败:', error);
-            }
-        },
-        // 2. 显示一个错误消息框
-        async showErrorMessage() {
-            try {
-                // showErrorBox 通常接收 title 和 content 两个字符串参数
-                // (假设主进程中 ALLOWED_MODULES.dialog.showErrorBox 如此定义)
-                await Main.dialog.showErrorBox('发生错误', '操作未能成功完成，请检查您的网络连接。');
-                console.log('错误消息框已显示');
-            } catch (error) {
-                console.error('显示错误消息框失败:', error);
-            }
-        },
-        // 1. 使用 NodeJS.fs.readFile 读取文件内容
-        async NodeJSReadFile() {
-            try {
-                // 注意：在这个纯粹的 NodeJS.* 示例中，我们没有使用 Main.dialog.showOpenDialog。
-                // 文件路径需要预先知道，或者通过其他方式获取。
-                // 为了演示，我们假设要读取一个用户目录下的 'my_document.txt' 文件。
-                // 我们首先需要获取用户主目录的路径，可以使用 NodeJS.os.homedir()。
-                const homeDirectory = await NodeJS.os.homedir(); // 假设 NodeJS.os.homedir 已暴露
-                const filePathToRead = await NodeJS.path.join(homeDirectory, 'my_test_document.txt'); // 假设 NodeJS.path.join 已暴露
-                console.log(`尝试从以下路径读取文件: ${filePathToRead}`);
-                // 为了让这个例子能运行，我们先尝试写入一个测试文件。
-                // （如果文件已存在，这会覆盖它。在实际应用中请谨慎处理。）
-                try {
-                    await NodeJS.fs.writeFileSync(filePathToRead, 'Hello from NodeJS.fs.writeFile!This is a test file.', 'utf-8');
-                    console.log(`测试文件已写入到: ${filePathToRead}`);
-                } catch (writeError) {
-                    console.error(`写入测试文件失败 (这可能是预期之中的，如果权限不足等): ${writeError.message}`);
-                    // 如果写入失败，读取操作很可能也会失败，除非文件已通过其他方式存在。
-                }
-
-                // 现在尝试读取文件
-                const fileContent = await NodeJS.fs.readFileSync(filePathToRead, 'utf-8');
-                console.log(`文件 "${filePathToRead}" 的内容:`);
-                console.log(fileContent);
-                alert(`文件内容:\n${fileContent}`);
-            } catch (error) {
-                console.error(`NodeJS.fs.readFile 操作失败: ${error.message}`);
-                let homedir = await NodeJS.os.homedir();
-                alert(`读取文件失败: ${error.message}\n请确保文件 "${await NodeJS.path.join(homedir, 'my_test_document.txt')}" 存在并且可读，或者写入操作成功。`);
-            }
-        },
-        async PJSReadFile() {
-            console.log(await PJS.WENJIAN.read());
-        },
-		async gotoRoutePage(){
-			this.$router.push('/Hello.page')
-		},
-        async openHelp() {
-            // 这里可以添加打开偏好设置窗口的逻辑
-            let winInfo = await window.windowManager.openWindow('/windows/help-window', {
-                width: 1200,
-                height: 900
-            });
-            console.log('Window created with ID(winInfo):', winInfo);
-            winInfo.webContents.on(
-                'did-stop-loading',
-                (res) => {
-                    console.log('Window did-stop-loading ========================= loaded');
-                    console.log(res)
-                }
-            );
-            winInfo.on('close',() =>{
-                console.log('Window close');
-            })
-            // let winInfo = await window.windowManager.openWindow('/windows/help-window', {
-            //     width: 800,
-            //     height: 600 
-            // })
-            // console.log('Window created with ID(winInfo):', winInfo);
-        },
-        async getOpenWindow() {
-            let windows = await window.windowManager.getAllWindow()
-            console.log('Window created with ID(windows):', windows);
-        },
-        async getWindowInfo() {
-            let winInfo = await window.windowManager.getWindowInfo(1)
-            console.log('Window created with ID(winInfo):', winInfo);
-        },
-        async OpenGetWindowAttr() {
-           // 在渲染进程中
-           let win = await window.windowManager.openWindow('/windows/help-window', {
-                width: 800,
-                height: 600
-            });
-            setTimeout( async () => {
-                console.log(win)
-                // 访问属性
-                const title = await win.title;  // 触发属性访问
-                console.log(title)
-                // 调用方法
-                await win.maximize();  // 触发方法调用
-                console.log(await win.getContentSize());
-            },20)
-            // await win.setSize(800, 600);  // 触发方法调用并传递参数 
-        },
-        async callGitHubAPI() {
-            try {
-                this.result = '加载中...';
-                const data = await fetchGitHub_viaProxy();
-                this.result = JSON.stringify(data, null, 2);
-            } catch (error) {
-                this.result = '错误: ' + error.message;
-            }
-        },
-
-        // @mainProcess
-        async testMainProcess(redererTxt,arg2) {
-            const fs = require('fs');
-            const path = require('path');
-            const userDataPath = app.getPath('userData');
-            const testFile = path.join(userDataPath, 'test.txt');
-            await fs.promises.writeFile(testFile, redererTxt+':::Hello from main process!');
-            return arg2+':File written successfully22!'+redererTxt;
-        },
-
-        // 带回调的主进程函数示例
-        // @mainProcess
-        async startMonitoring() {
-            const { powerMonitor } = require('electron');
-            const systemInfo = {
-                onBatteryPower: powerMonitor.onBatteryPower,
-                time: new Date().toISOString()
-            };
-            return systemInfo;
-        },
-
-        // 调用带回调的主进程函数
-        async startMonitoringSystem() {
-            try {
-                const monitor = await this.startMonitoring();
-                this.status = `界面打开立即执行获取系统状态，每2秒获取一次结果: ${JSON.stringify(monitor)}`;
-                // 每500ms发送一次系统状态
-                setInterval( async () => {
-                    const monitor = await this.startMonitoring();
-                    this.status = `界面打开立即执行获取系统状态，每2秒获取一次结果: ${JSON.stringify(monitor)}`;
-                }, 2000);
-            } catch (error) {
-                this.status = '监控错误2: ' + error.message;
-            }
-        },
-
-        // @mainProcess
-        async openDialog() {
-            const { dialog } = require('electron');
-            const result = await dialog.showOpenDialog({
-                properties: ['openFile', 'multiSelections']
-            });
-            return result.filePaths;
-        },
-        async openModalHelp() {
-            try {
-                this.showModalOverlay = true; // 打开时显示遮罩层
-                const currentWinId = window.getWinId();
-                let modalWinInfo = await window.windowManager.openModalWindow(currentWinId, '/windows/help-window', {
-                    width: 600,
-                    height: 400,
-                    minimizable: false,
-                    maximizable: false
-                });
-                console.log('Modal window created:', modalWinInfo);
-                modalWinInfo.on('close',() =>{
-                    this.showModalOverlay = false; // 出错时隐藏遮罩层
-                    console.log('modalWinInfo Window close');
-                })
-            } catch (error) {
-                this.showModalOverlay = false; // 出错时隐藏遮罩层
-                console.error('打开模态窗口失败:', error);
-            }
+        write: function (data) {
+            console.log(data);
         }
     }
+    module.exports = WENJIAN;
+    </pre>
+                <p>项目任意位置使用插件:</p>
+                <pre>//无需引入
+    await PJS.WENJIAN.read()</pre>
+            </div>
+            <div class="code-example">
+                <h4>4. 使用注释@mainProcess将这个函数变为主进程代码</h4>
+                <pre>// @mainProcess
+export async function getSystemInfo() {
+    return os.cpus();
+}</pre>
+            </div>
+        </div>
+      </div>
+
+      <!-- 窗口管理内容 -->
+      <div v-if="activeTab === 'window'" class="content-section">
+        <h1>窗口管理使用案例</h1>
+        
+        <div class="example-card">
+          <h3>🪟 Electron 窗口管理</h3>
+          
+          <div class="code-example">
+            <h4>1. 创建新窗口(window.windowManager.openWindow)，并监听加载完毕和关闭窗口</h4>
+            <pre>let winInfo = await window.windowManager.openWindow('/windows/help-window', {
+    width: 1200,
+    height: 900
+});
+console.log('Window created with ID(winInfo):', winInfo);
+winInfo.webContents.on(
+    'did-stop-loading',
+    (res) => {
+        console.log('Window did-stop-loading ========================= loaded');
+        console.log(res)
+    }
+);
+winInfo.on('close', () => {
+    console.log('Window close');
+})</pre>
+          </div>
+
+          <div class="code-example">
+            <h4>2. 关闭当前窗口</h4>
+            <pre>// 渲染进程发送消息
+const currentWin = window.windowManager.getWindow();
+currentWin.close()</pre>
+          </div>
+
+          <div class="code-example">
+            <h4>3. 窗口状态管理</h4>
+            <pre>// 窗口最小化、最大化、关闭
+win.minimize()
+win.maximize()
+win.close()
+
+// 监听窗口事件
+win.on('closed', () => {
+  console.log('窗口已关闭')
+})
+
+win.on('resize', () => {
+  console.log('窗口大小已改变')
+})</pre>
+          </div>
+          
+          <div class="action-buttons">
+            <button class="demo-btn" @click="openNewWindow">打开新窗口</button>
+            <button class="demo-btn" @click="minimizeWindow">最小化窗口</button>
+            <button class="demo-btn" @click="toggleMaximize">切换最大化</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script setup>
+import { ref } from 'vue'
+
+// 响应式数据
+const activeTab = ref('home')
+
+// 方法定义
+const openNewWindow = async () => {
+    // 这里可以调用 Electron API 打开新窗口
+    console.log('打开新窗口')
+    let winInfo = await window.windowManager.openWindow('/windows/other-window', {
+        width: 1200,
+        height: 900
+    });
+
+}
+
+const minimizeWindow = () => {
+    const currentWin = window.windowManager.getWindow();
+    currentWin.minimize();
+    // 最小化当前窗口
+    console.log('最小化窗口')
+}
+
+const toggleMaximize = () => {
+    // 切换最大化状态
+    console.log('切换最大化')
+    const currentWin = window.windowManager.getWindow();
+    currentWin.maximize();
 }
 </script>
 
 <style scoped>
-/* For demo */
-.ant-carousel >>> .slick-slide {
+.app-container {
+  display: flex;
+  height: 100vh;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* 左侧菜单样式 */
+.sidebar {
+  width: 250px;
+  background: linear-gradient(180deg, #2c3e50 0%, #34495e 100%);
+  color: white;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.logo {
+  padding: 20px;
   text-align: center;
-  height: 160px;
-  line-height: 160px;
-  background: #364d79;
-  overflow: hidden;
+  border-bottom: 1px solid #34495e;
 }
 
-.ant-carousel >>> .slick-slide h3 {
-  color: #fff;
-}
-.home {
-    padding: 20px;
-    text-align: center;
-}
-.btn-item{
-    margin: 10px;
-}
-button {
-    padding: 10px 20px;
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 16px;
-}
-/* 新增遮罩层样式 */
-.modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.5);
-    z-index: 9998;
-    backdrop-filter: blur(2px);
-}
-button:hover {
-    background-color: #45a049;
+.logo h2 {
+  margin: 0;
+  color: #ecf0f1;
+  font-size: 24px;
+  font-weight: 600;
 }
 
-#result, #status {
-    margin-top: 20px;
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    background-color: #f9f9f9;
-    white-space: pre-wrap;
+.nav-menu {
+  flex: 1;
+  padding: 20px 0;
 }
-</style> 
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  padding: 15px 20px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border-left: 3px solid transparent;
+}
+
+.nav-item:hover {
+  background-color: #34495e;
+  border-left-color: #3498db;
+}
+
+.nav-item.active {
+  background-color: #3498db;
+  border-left-color: #2980b9;
+}
+
+.nav-item .icon {
+  font-size: 18px;
+  margin-right: 12px;
+  width: 20px;
+  text-align: center;
+}
+
+.nav-item span {
+  font-size: 16px;
+  font-weight: 500;
+}
+
+/* 右侧内容区域样式 */
+.main-content {
+  flex: 1;
+  padding: 30px;
+  background-color: #f8f9fa;
+  overflow-y: auto;
+}
+
+.content-section h1 {
+  color: #2c3e50;
+  margin-bottom: 30px;
+  font-size: 32px;
+  font-weight: 600;
+}
+
+.intro-card, .example-card {
+  background: white;
+  border-radius: 12px;
+  padding: 30px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  margin-bottom: 20px;
+}
+
+.intro-card h3, .example-card h3 {
+  color: #2c3e50;
+  margin-bottom: 15px;
+  font-size: 24px;
+}
+
+.intro-card h4 {
+  color: #34495e;
+  margin: 25px 0 15px 0;
+  font-size: 18px;
+}
+
+.intro-card p {
+  color: #7f8c8d;
+  line-height: 1.6;
+  font-size: 16px;
+}
+
+.intro-card ul {
+  color: #7f8c8d;
+  line-height: 1.8;
+}
+
+.intro-card li {
+  margin-bottom: 8px;
+}
+
+.tech-stack {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 15px;
+}
+
+.tech-tag {
+  background: linear-gradient(135deg, #3498db, #2980b9);
+  color: white;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.code-example {
+  margin-bottom: 25px;
+}
+
+.code-example h4 {
+  color: #2c3e50;
+  margin-bottom: 10px;
+  font-size: 16px;
+}
+
+.code-example pre {
+  background: #2c3e50;
+  color: #ecf0f1;
+  padding: 20px;
+  border-radius: 8px;
+  overflow-x: auto;
+  font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 15px;
+  margin-top: 25px;
+  flex-wrap: wrap;
+}
+
+.demo-btn {
+  background: linear-gradient(135deg, #3498db, #2980b9);
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.demo-btn:hover {
+  background: linear-gradient(135deg, #2980b9, #1f5f8b);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(52, 152, 219, 0.3);
+}
+
+.demo-btn:active {
+  transform: translateY(0);
+}
+
+/* 滚动条样式 */
+.main-content::-webkit-scrollbar {
+  width: 8px;
+}
+
+.main-content::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+.main-content::-webkit-scrollbar-thumb {
+  background: #bdc3c7;
+  border-radius: 4px;
+}
+
+.main-content::-webkit-scrollbar-thumb:hover {
+  background: #95a5a6;
+}
+</style>
