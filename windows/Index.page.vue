@@ -58,6 +58,12 @@
             <span class="tech-tag">Node.js</span>
             <span class="tech-tag">Vite</span>
           </div>
+          <div>
+            <a href="html-window/index.html" native-target="_window">窗口打开路径设计、开发调试</a>
+          </div>
+          <div>
+            <a href="old-window/index.html" native-target="_window">语法设计、窗口管理类、以及其他所有特性</a>
+          </div>
         </div>
       </div>
 
@@ -155,7 +161,7 @@ export async function getSystemInfo() {
           
           <div class="code-example">
             <h4>1. 创建新窗口(window.windowManager.openWindow)，并监听加载完毕和关闭窗口</h4>
-            <pre>let winInfo = await window.windowManager.openWindow('/windows/help-window', {
+            <pre>let winInfo = await window.windowManager.openWindow('/help-window', {
     width: 1200,
     height: 900
 });
@@ -217,7 +223,7 @@ const activeTab = ref('home')
 const openNewWindow = async () => {
     // 这里可以调用 Electron API 打开新窗口
     console.log('打开新窗口')
-    let winInfo = await window.windowManager.openWindow('/windows/other-window', {
+    let winInfo = await window.windowManager.openWindow('/other-window', {
         width: 1200,
         height: 900
     });

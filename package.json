@@ -1,26 +1,68 @@
 {
-  "name": "demo0",
-  "version": "0.0.1",
+  "name": "demo-vue3-5",
+  "version": "0.1.0",
   "private": true,
+  "main": "./out/build/main/main.js",
+  "author": "LiuXiaoJie",
+  "description": "demo-vue3-5,This project is created based on the mixone tool",
   "scripts": {
-    "dev": "npm run compile && npm run serve:electron",
+    "dev": "npm run compile && npm run start:desktop",
     "compile": "mixone compile",
-    "serve:electron": "mixone serve --electron",
-    "build": "mixone build",
-    "preview": "mixone preview"
+    "start:desktop": "mixone serve --desktop --watch",
+    "start:web": "mixone serve --web --open --watch",
+    "build:desktop": "mixone build --desktop",
+    "build:web": "mixone build --web",
+    "build:win": "npm run compile && npm run build:desktop && mixone package --win",
+    "build:mac": "npm run compile && npm run build:desktop && mixone package --mac",
+    "build:linux": "npm run compile && npm run build:desktop && mixone package --linux",
+    "preview:web": "npm run compile && npm run build:web && mixone preview --start-web",
+    "preview:desktop": "npm run compile && npm run build:desktop && mixone preview --start-desktop",
+    "preview:desktop2": "mixone preview --start-desktop"
+  },
+  "build": {
+    "appId": "com.example.demo-vue3-5",
+    "productName": "demo-vue3-5",
+    "directories": {
+      "output": "dist/packager"
+    },
+    "files": [
+      "out/**/*",
+      "!dist",
+      "!{out/vite.config.js,out/vite.config,out/vite.config.ts,out/package.json}",
+      "!out/serve.js",
+      "!out/watch-manager.js",
+      "!{main,utils,store,windows,assets,out/main,out/utils,out/store,out/windows,out/assets,out/logs,.prettierignore,.eslintignore,.eslintrc.cjs,.prettierignore,.prettierrc.yaml,dev-app-update.yml,CHANGELOG.md,README.md}"
+    ],
+    "win": {
+      "target": "nsis",
+      "icon": "assets/favicon.ico"
+    },
+    "mac": {
+      "target": "dmg",
+      "icon": "assets/favicon.icns"
+    },
+    "linux": {
+      "target": "AppImage",
+      "icon": "assets/favicon.ico"
+    }
   },
   "dependencies": {
-    "ant-design-vue": "^1.7.8",
-    "electron": "^21.0.0",
+    "electron-updater": "^6.3.9",
     "iconv-lite": "^0.6.3",
-    "vue": "^2.7.16",
-    "vue-router": "^3.6.5",
-    "vuex": "^3.6.2"
+    "vue": "^3.5.13",
+    "vue-router": "^4.5.1",
+    "pinia": "^3.0.3",
+    "ant-design-vue": "^4.2.6"
   },
   "devDependencies": {
-    "@vitejs/plugin-vue2": "^2.3.3",
     "chokidar": "^3.5.3",
-    "iconv-lite": "^0.6.3",
-    "vite": "^4.5.14"
+    "electron": "21.4.4",
+    "electron-builder": "^26.0.12",
+    "@vitejs/plugin-vue": "^6.0.0",
+    "@vue/tsconfig": "^0.7.0",
+    "less": "^4.3.0",
+    "typescript": "~5.8.3",
+    "vue-tsc": "^2.2.8",
+    "vite": "^7.0.4"
   }
 }

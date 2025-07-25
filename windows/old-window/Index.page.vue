@@ -1,6 +1,6 @@
 <template>
     <div class="home">
-        <img :src="require('../assets/images/logo2.png')" alt="mixone logo">
+        <img :src="logo2" alt="mixone logo">
         <h1>mixone让electron再次伟大！</h1>
         <h1>mixone让vue再次伟大！</h1>
         <p>这个窗口页面包含了一些新语法使用例子。</p>
@@ -69,9 +69,9 @@
 
 <script setup>
 import { ref, onMounted } from 'vue'
-import { fetchGitHub_viaProxy } from '@/utils/api/github.js';
-import { getDocumentsPath2 } from '@/utils/api/utils.js';
-
+import { fetchGitHub_viaProxy } from '@/utils/github.js';
+import { getDocumentsPath2 } from '@/utils/utils.js';
+import logo2 from '../assets/images/logo2.png';
 // 响应式数据
 const result = ref('')
 const status = ref('')
@@ -203,7 +203,7 @@ const gotoRoutePage = async () => {
 
 const openHelp = async () => {
     // 这里可以添加打开偏好设置窗口的逻辑
-    let winInfo = await window.windowManager.openWindow('/windows/help-window', {
+    let winInfo = await window.windowManager.openWindow('/help-window', {
         width: 1200,
         height: 900
     });
@@ -218,7 +218,7 @@ const openHelp = async () => {
     winInfo.on('close', () => {
         console.log('Window close');
     })
-    // let winInfo = await window.windowManager.openWindow('/windows/help-window', {
+    // let winInfo = await window.windowManager.openWindow('/help-window', {
     //     width: 800,
     //     height: 600 
     // })
@@ -236,7 +236,7 @@ const getWindowInfo = async () => {
 
 const OpenGetWindowAttr = async () => {
     // 在渲染进程中
-    let win = await window.windowManager.openWindow('/windows/help-window', {
+    let win = await window.windowManager.openWindow('/help-window', {
         width: 800,
         height: 600
     });
@@ -311,7 +311,7 @@ const openModalHelp = async () => {
     try {
         showModalOverlay.value = true; // 打开时显示遮罩层
         const currentWinId = window.getWinId();
-        let modalWinInfo = await window.windowManager.openModalWindow(currentWinId, '/windows/help-window', {
+        let modalWinInfo = await window.windowManager.openModalWindow(currentWinId, '/help-window', {
             width: 600,
             height: 400,
             minimizable: false,

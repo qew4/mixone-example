@@ -1,1 +1,56 @@
-/node_modules
+.qodo
+# 编译生成的文件
+*.class
+*.o
+*.pyc
+*.exe
+*.dll
+*.so
+*.jar
+*.war
+*.zip
+
+# 日志文件
+*.log
+
+# 临时文件和缓存文件
+*.cache
+*.tmp
+*.bak
+*.sw?
+
+# IDE 和编辑器生成的文件
+.idea/
+.vscode/*
+*.index
+*.iml
+
+# 依赖管理工具生成的文件
+node_modules
+out
+
+# 系统文件和目录
+.DS_Store
+Thumbs.db
+
+# 包含敏感信息的文件（示例，实际应根据项目情况调整）
+config/secrets.json
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+dist
+dist-ssr
+*.local
+
+
+*.suo
+*.ntvs*
+*.njsproj
+*.sln

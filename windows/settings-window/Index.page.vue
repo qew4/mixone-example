@@ -17,7 +17,7 @@ export default {
         },
         openHelp() {
             // 这里可以添加打开偏好设置窗口的逻辑
-            window.openWindow('/windows/help-window', {
+            window.openWindow('/help-window', {
                 width: 800,
                 height: 600
             });

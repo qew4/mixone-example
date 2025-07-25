@@ -1,15 +1,15 @@
 {
     "name": "main",
     "title": "主窗口",
-    "width": 800,
-    "height": 600,
+    "width": 950,
+    "height": 700,
     "frame": true,
     "resizable": true,
     "minimizable": true,
     "maximizable": true,
     "webPreferences": {
-        "nodeIntegration": false,
-        "contextIsolation": false
+        "nodeIntegration": true,
+        "contextIsolation": true
     },
-    "framework": "vue2"
+    "framework": "vue3"
 } 

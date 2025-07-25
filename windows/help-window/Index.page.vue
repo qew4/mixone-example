@@ -24,8 +24,8 @@
             </div>
         </div>
         <div class="result">{{ result }}</div>
-        <button @click="openWindow('/windows/settings-window')">打开设置窗口</button>
-        <button @click="openWindow('/windows')">打开入口</button>
+        <button @click="openWindow('/settings-window')">打开设置窗口</button>
+        <button @click="openWindow('/')">打开入口</button>
         <button @click="fetchGitHub_viaProxy2">点击g</button>
         <button @click="getMainConfig2">dialog</button>
         <button @click="getSystemInfo2">获取系统信息</button>
@@ -43,9 +43,9 @@
 </template>
 
 <script>
-import { fetchGitHub_viaProxy, getMainConfig2 } from '../../utils/api/github';
-import { getSystemInfo, monitorCPU } from '../../utils/api/utils';
-import CustomButton from '../../components/basic/CustomButton.vue';
+import { fetchGitHub_viaProxy, getMainConfig2 } from '@/utils/github.js';
+import { getSystemInfo, monitorCPU } from '@/utils/utils.js';
+import CustomButton from '@/components/basic/CustomButton.vue';
 export default {
     name: 'HelpHome',
     components: {

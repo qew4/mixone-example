@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>test pure html</title>
+</head>
+<body>
+    <div>
+        <div>openWindow test pure html32 - 123 -23 - 582 -12</div>
+        <a href="../newhtml-window/index.html" native-target="_window">newhtml-window</a>
+        <br>
+        <a href="other.html" native-target="_window">other-window</a>
+        <br>
+        <a href="./other.html" native-target="_window">other-window</a>
+        <br>
+        <a href="/index.html" native-target="_window">/index.html</a>
+        <br>
+        <a href="/" native-target="_window">/index.html</a>
+        <br>
+        <a href="/newhtml-window/index.html">newhtml-window(/newhtml-window/index.html)</a>
+        <br>
+        <a href="../newhtml-window/index.html">new html</a>
+        <br>
+        <a href="http://localhost:5173/newhtml-window/index.html">http://localhost:5173/newhtml-window/index.html</a>
+        <br>
+        <a href="http://localhost:5173/index.html">http://localhost:5173/index.html</a>
+        <br>
+        <a href="http://localhost:5173/">http://localhost:5173/</a>
+        <br>
+        <a href="https://www.baidu.com/" native-target="_window" native-options="{width:1920,height:1080}">https://www.baidu.com/</a>
+        <br>
+        <a href="file:///E:/work/electron/demo-vue3-5/dist/packager/win-unpacked/resources/app.asar/out/build/windows/index.html" native-target="_window" native-options="{width:1920,height:1080}">file:///E:/work/electron/demo-vue3-5/dist/packager/win-unpacked/resources/app.asar/out/build/windows/index.html</a>
+    </div>
+    <script>
+        async function test() {
+            let path = await Main.app.getPath('documents');
+            console.log('Selected getDocumentsPath356:', path);
+        }
+        test();
+    </script>
+</body>
+</html>
