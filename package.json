@@ -16,8 +16,7 @@
     "build:mac": "npm run compile && npm run build:desktop && mixone package --mac",
     "build:linux": "npm run compile && npm run build:desktop && mixone package --linux",
     "preview:web": "npm run compile && npm run build:web && mixone preview --start-web",
-    "preview:desktop": "npm run compile && npm run build:desktop && mixone preview --start-desktop",
-    "preview:desktop2": "mixone preview --start-desktop"
+    "preview:desktop": "npm run compile && npm run build:desktop && mixone preview --start-desktop"
   },
   "build": {
     "appId": "com.example.demo-vue3-5",
@@ -63,6 +62,7 @@
     "less": "^4.3.0",
     "typescript": "~5.8.3",
     "vue-tsc": "^2.2.8",
-    "vite": "^7.0.4"
+    "vite": "^7.0.4",
+    "mixone":"^0.1.0-alpha.29"
   }
 }
