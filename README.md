@@ -1,60 +1,109 @@
-## mixone-example简介
-**mixone-example是由mixone工具创建的electron桌面项目例子。该案例中列出了去除IPC通信代码的例子demo，列出了windowManger管理窗口类的部分用法demo**
+<div align="center">
 
-## mixone介绍
-在详细介绍本案例之前，我们先让大家了解mixone工具：它是开发electron应用的编译工具，使用到vite构建工具，将Nodejs的包和electron主进程API的使用集成到vue或react项目中，在需要使用的代码位置以Main、NodeJS、PJS开头即可访问，通过编译实现开发层面去IPC通信。去除IPC通信的语法后，项目目录结构便可与vue或react项目的目录结构相同，而不再需要区分主进程和渲染进程的冗余的目录层级，这就让我们的工程化目录结构比其他框架的目录结构更清晰、一目了然。
-若在开发中碰到任何mixone问题，可以在此仓库提issues。或联系作者QQ：996150938
-## 创建mixone应用
-### 使用mixone工具创建项目
-你可以选择自己的UI库、electron版本、vite版本等。
-```
+# 🚀 MixOne Example
+
+**基于 MixOne 工具的 Electron 桌面应用示例项目**
+
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![Electron](https://img.shields.io/badge/Electron-Latest-47848f.svg)](https://electronjs.org/)
+[![Vue](https://img.shields.io/badge/Vue-3.x-4fc08d.svg)](https://vuejs.org/)
+[![Vite](https://img.shields.io/badge/Vite-Latest-646cff.svg)](https://vitejs.dev/)
+
+</div>
+
+## 📖 项目简介
+
+**mixone-example** 是由 MixOne 工具创建的 Electron 桌面项目示例。本项目展示了：
+
+- ✨ **去除 IPC 通信代码**的开发模式
+- 🎯 **WindowManager** 窗口管理类的使用方法
+- 🔧 **完整的项目结构**和最佳实践
+
+## 🛠️ MixOne 工具介绍
+MixOne是一个Node脚手架工具，基于Vite实现，用于编译HTML5、JavasCript，Vue，React等代码，支持打包多HTML入口的(BS架构)Web应用和打包(CS架构)桌面端安装包。桌面端的目前基于Electron实现，MixOne有自己的语法糖来访问Electron的API和NodeJS的功能，这种语法糖完全可以取代Electron的IPC通讯代码。
+
+### 🌟 核心特性
+
+- **🚫 去除 IPC 通信复杂性**：通过编译时处理，让开发者无需关心主进程和渲染进程间的通信
+- **📁 简化目录结构**：项目结构与传统 Vue/React 项目保持一致
+- **⚡ 基于 Vite 构建**：享受极速的开发体验
+- **🔌 无缝集成**：Node.js 包和 Electron API 可直接在组件中使用
+
+### 📚 相关资源
+
+- 📖 [MixOne 中文文档](doc/MixOne_document_chinese.md)
+- 🐛 [问题反馈](https://github.com/qew4/mixone-example/issues)
+- 💬 **联系作者 QQ**：996150938
+## 🚀 快速开始
+
+### 方式一：使用 MixOne 工具创建新项目
+
+你可以自由选择 UI 库、Electron 版本、Vite 版本等配置：
+
+```bash
+# 全局安装 MixOne
 npm install mixone -g
-//创建项目
+
+# 创建新项目
 mixone create mixone-demo1
 cd mixone-demo1
-npm install //安装依赖 或 yarn
+
+# 安装依赖
+npm install  # 或使用 yarn
+
+# 启动开发服务器
 npm run dev
 ```
-### clone本项目开始创建项目
-集成了一些例子。
-```
+
+### 方式二：克隆本示例项目
+
+本项目集成了丰富的使用示例：
+
+```bash
+# 全局安装 MixOne
 npm install mixone -g
-//创建项目
+
+# 克隆项目
 git clone https://github.com/qew4/mixone-example.git
-cd mixone-demo
-npm install //安装依赖 或 yarn
+cd mixone-example
+
+# 安装依赖
+npm install  # 或使用 yarn
+
+# 启动开发服务器
 npm run dev
 ```
-## mixone的项目结构
-- 完整目录结构
+## 📁 项目结构
+
+### 🗂️ 完整目录结构
 ```
-your-mixone-project/              # 项目根目录
-├── assets/                       # 静态资源目录
-│   ├── favicon.ico               # 应用图标
-├── components/                   # 公共组件目录
-│   ├── Button.vue                # 按钮组件
-│   └── Dialog.vue                # 对话框组件
-├── windows/                      # 根窗口目录
-│   ├── Index.vue                 # 窗口入口
-│   └── other-window/             # 其他窗口，以“-window”结尾
-│       ├── Index.vue             # 窗口入口
-│       ├── Sencond.page.vue      # 页面组件，以“page.vue”结尾，自动加入router
-│       ├── Sencond.vue           # 普通组件
-│   └── setting-window/           # 设置窗口，以“-window”结尾
-│       ├── Index.vue             # 窗口入口
-│       ├── main.ts               # vue项目入口，非必须存在。
-│       ├── App.vue               # vue顶层组件，非必须存在。
-│       ├── router.js             # 路由组件，非必须存在。
-│       ├── window.json			  # 窗口默认配置，可被openWindow方法重置，非必须存在。
-│       ├── preload.js			  # 每一个窗口的预加载文件，可省略。可以自定义暴露自己的方法给窗口
-├── main/                         # 主进程代码
-│   ├── main.js                   # 主进程入口文件
-│   ├── Wenjian.fn.js             # 原生插件,以PJS开头进行访问。
-├── utils/                        # 工具函数目录
-│   ├── request.js                # 请求工具
-│   └── common.js                 # 通用工具函数
-├── out/                          # 编译输出目录
-└── package.json                  # 项目配置文件			
+mixone-vue-app/
+├── 📂 assets/                    # 🎨 全局静态资源
+│   └── 📄 favicon.ico            # 应用图标
+├── 📂 components/                # 🧩 全局组件库
+│   ├── 📄 Button.vue             # 按钮组件
+│   └── 📄 Dialog.vue             # 对话框组件
+├── 📂 windows/                   # 🖼窗口目录（以 -window 结尾，windows是根窗口目录）
+│   ├── 📄 Index.page.vue         # 主窗口入口页面组件
+│   ├── 📂 other-window/          # 其他窗口
+│   │   ├── 📄 Index.page.vue     # 入口页面组件
+│   │   ├── 📄 Second.page.vue    # 页面组件（自动路由）
+│   │   ├── 📄 Second.vue         # 普通组件
+│   │   ├── 📄 preload.js         # 窗口预加载脚本(可选)
+│   │   └── 📄 window.json        # 窗口配置
+│   └── 📂 setting-window/        # 设置窗口
+│       ├── 📄 Index.page.vue     # 入口页面组件
+│       ├── 📄 main.ts            # Vue 入口（可选）
+│       ├── 📄 App.vue            # 顶层组件（可选）
+│       └── 📄 router.js          # 路由配置（可选）
+├── 📂 main/                      # ⚡ 主进程代码
+│   ├── 📄 main.js                # 主进程入口
+│   └── 📄 *.fn.js                # 原生插件（PJS 访问）
+├── 📂 utils/                     # 🔧 工具函数
+│   ├── 📄 request.js             # 请求工具
+│   └── 📄 common.js              # 通用工具
+├── 📂 out/                       # 📦 编译输出
+└── 📄 package.json               # 项目配置	
 ```
 - 工程文件介绍
 	- 窗口目录
@@ -67,107 +116,169 @@ your-mixone-project/              # 项目根目录
 		* 窗口目录下的window.json可以配置窗口的属性，在多个位置打开窗口无需再重复编写相同的属性，不存在window.json则默认。
 		* 窗口目录下的assets文件夹是静态资源文件夹，当前窗口的组件使用。和全局有区别。
 	- main.js
-	main/main.js文件是程序的主入口，里面默认就行，能不修改别修改。
-	- components
-	components是全局的组件目录，会被窗口目录下的组件调用，所有窗口共享。
-	- assets是全局的静态资源目录，所有窗口共享。
-	- utils是全局的工具目录，所有窗口共享。不建议main目录下的js引用。
+#### 📁 其他重要目录
+
+| 目录/文件 | 说明 | 特点 |
+|-----------|------|------|
+| `main/main.js` | 程序主入口 | 默认配置即可，建议不要修改 |
+| `components/` | 全局组件目录 | 所有窗口共享，可被任意窗口调用 |
+| `assets/` | 全局静态资源 | 所有窗口共享的资源文件 |
+| `utils/` | 全局工具目录 | 所有窗口共享，不建议 main 目录引用 |
 - 窗口目录文件
 ```
-│———xxxx-window/           # 设置窗口，以“-window”结尾
-│       ├── Index.vue             # 窗口入口
-│       ├── Sencond.page.vue      # 以“page.vue”结尾的页面
-│       ├── main.ts               # 可省略。
-│       ├── App.vue               # 可省略。
-│       ├── router.js             # 可省略。
-│       ├── window.json			  # 可省略
-│       ├── preload.js 		  	  # 可省略
+📁 xxxx-window/                    # 窗口目录（以 "-window" 结尾）
+├── 📄 Index.vue                   # 🚪 窗口入口文件
+├── 📄 Second.page.vue             # 📄 页面组件（自动路由）
+├── 📄 main.ts                     # ⚙️ Vue 项目入口（可选）
+├── 📄 App.vue                     # 🎯 Vue 顶层组件（可选）
+├── 📄 router.js                   # 🛣️ 路由配置（可选）
+├── 📄 window.json                 # ⚙️ 窗口配置（可选）
+└── 📄 preload.js                  # ⚡ 预加载脚本（可选）
 
 ```
 
-## mixone去IPC语法糖
-## 什么是去IPC通讯语法糖。
-IPC是进程之间通讯的意思，electron的主进程和渲染进程需要自己设计事件位置、事件名以及事件传输方向（主->渲,渲->主）。mixone要求把主进程API和nodejs的代码以四种方式写在业务代码的位置，mixone会将其语法编译为到主进程代码并符合electron的安全规范。从而实现开发层面去IPC通讯的语法，但是编译之后依旧以IPC通讯原理运行。
-### 去IPC的四种语法糖
-  - 注释方式。使用“// @mainProcess”注释声明函数访问了系统API。可以在所有js文件中注释、也可以在vue组件中注释。
+## 🍬 MixOne 去 IPC 语法糖
+
+### 💡 什么是去 IPC 通信语法糖
+
+**IPC**（Inter-Process Communication）是进程间通信的意思。在传统 Electron 开发中，主进程和渲染进程需要开发者自己设计：
+
+- 🎯 事件位置
+- 📝 事件名称  
+- 🔄 传输方向（主进程 ↔ 渲染进程）
+
+MixOne 通过**编译时处理**，让开发者可以直接在业务代码中使用主进程 API 和 Node.js 代码，编译后自动转换为符合 Electron 安全规范的 IPC 通信代码。
+
+> 💡 **核心理念**：开发时去 IPC，运行时仍是 IPC
+### 🎯 四种语法糖详解
+
+#### 1️⃣ 注释方式 `@mainProcess`
+
+使用 `// @mainProcess` 注释声明函数访问了系统 API，适用于所有 JS 文件和 Vue 组件。
+
+```javascript
+// @mainProcess
+export async function getSystemInfo() {
+  return os.cpus();
+}
+
+// @mainProcess
+export async function monitorCPU() {
+  const initial = os.cpus();
+  return 'initial2:' + initial;
+}
+```
+
+#### 2️⃣ Main 常量语法
+
+使用 `Main` 标识符直接访问 Electron API，简单快捷。
+
+```javascript
+// 访问 Electron Main API
+await Main.app.getPath('documents')
+```
+
+#### 3️⃣ PJS 常量语法
+
+使用 `PJS` 标识符访问原生插件（Plugin Javascript）。
+
+```javascript
+// 先要在 main 目录下实现 WENJIAN.fn.js 文件，请看源码中的例子
+await PJS.WENJIAN.read()
+```
+
+#### 4️⃣ NodeJS 常量语法
+
+使用 `NodeJS` 访问 Node.js 包。
+
+```javascript
+// os 是 NodeJS 内置包，无需安装
+// 第三方包需要通过 npm install 安装
+const homeDirectory = await NodeJS.os.homedir();
+const filePathToRead = await NodeJS.path.join(homeDirectory, 'my_test_document.txt'); 
   ```
-  // @mainProcess
-  export async function getSystemInfo() {
-    return os.cpus();
+### 💡 使用技巧
+
+不同语法糖适用于不同场景：
+
+- **常量语法**：适用于访问简单的方法和属性
+- **注释方式**：适用于包含回调函数、定时器等复杂场景
+- **无需预暴露**：语法常量可直接使用，无需提前暴露
+
+> ⚠️ **注意**：当常量语法遇到回调函数、定时器等复杂情况时可能报错，此时应使用注释方式。
+## 🪟 窗口管理类
+
+### 🎛️ 窗口管理功能
+
+#### 📱 创建窗口
+
+```javascript
+let winInfo = await window.windowManager.openWindow('/windows/help-window', {
+  width: 1200,
+  height: 900
+});
+console.log('Window created with ID:', winInfo);
+```
+
+#### 🔲 创建模态窗口
+
+```javascript
+const currentWinId = window.getWinId();
+let modalWinInfo = await window.windowManager.openModalWindow(
+  currentWinId, 
+  '/windows/help-window', 
+  {
+    width: 600,
+    height: 400,
+    minimizable: false,
+    maximizable: false
   }
-  // @mainProcess
-  export async function monitorCPU() {
-    const initial = os.cpus();
-    return 'initial2:'+initial;
-  }
-  ```
-  - Main常量语法。使用Main标识符号直接访问Electron的API，方便更快捷。
-  ```
-  // app是 electron Main API，而getPath是该API下的方法
-  await Main.app.getPath('documents')
-  ```
-  - PJS常量语法。使用PJS标识符访问原生插件(Plugin Javascript)。
-  ```
-  //先要在main目录下实现WENJIAN.fn.js文件，请看源码中的例子
-  await PJS.WENJIAN.read()
-  ```
-  - NodeJS常量语法。使用NodeJS访问nodejs的包。
-  ```
-  // os是NodeJS的一个内置包，所以不需要安装也能访问，但是如果访问的是一个第三方包，你就得提前把这个包通过npm install的方式安装上。
-  const homeDirectory = await NodeJS.os.homedir();
-  const filePathToRead = await NodeJS.path.join(homeDirectory, 'my_test_document.txt'); 
-  ```
-### 使用技巧：
-他们之间有着不同的使用场景。常量语法是访问一些简单的方法和属性、如果这些方法中含有回调函数、定时器等情况，那么它就可能报错，这时就该使用注释方式来实现去IPC通信语法。语法常量的使用不需要前提前暴露。
-## mixone的窗口管理类
-- 窗口管理
-  - 创建窗口。 
-  ```
-	let winInfo = await window.windowManager.openWindow('/windows/help-window', {
-	  width: 1200,
-	  height: 900
-	});
-	console.log('Window created with ID(winInfo):', winInfo);
-  ```
-  - 创建窗口的子modal窗口。 
-  ```
-	const currentWinId = window.getWinId();
-	let modalWinInfo = await window.windowManager.openModalWindow(currentWinId, '/windows/help-window', {
-		width: 600,
-		height: 400,
-		minimizable: false,
-		maximizable: false
-	});
-  ```
-  - 窗口之间通讯。 
-  ```
-  window.windowManager.sendToWindow(WinId,'orderPay',{orderId:12345})
-  ```
-  - 窗口事件监听 
-  ```
-    //监听窗口close、did-stop-loading事件，并不是所有的原生事件都能监听，试试就知道了
-	  let winInfo = await window.windowManager.openWindow('/windows/help-window', {
-		  width: 1200,
-		  height: 900
-	  });
-	  console.log('Window created with ID(winInfo):', winInfo);
-	  winInfo.webContents.on(
-		  'did-stop-loading',
-		  (res) => {
-			  console.log('Window did-stop-loading ========================= loaded');
-			  console.log(res)
-		  }
-	  );
-	  winInfo.on('close',() =>{
-		  console.log('Window close');
-	  })
-  ```
-## 常见问题
-- 当碰到未知问题或其他方式已经无法解决时，怎么办？
-“npm run dev”重启应用是比较万能的解决方法，若还是无法解决，请在issues中提交问题，我们会尽快解决。
-- 支持react吗？
-支持。
-- 支持vue吗？
+);
+```
+
+#### 💬 窗口间通信
+
+```javascript
+window.windowManager.sendToWindow(WinId, 'orderPay', { orderId: 12345 })
+```
+
+#### 👂 窗口事件监听
+
+```javascript
+// 监听窗口 close、did-stop-loading 事件
+// 注意：并非所有原生事件都能监听
+let winInfo = await window.windowManager.openWindow('/windows/help-window', {
+  width: 1200,
+  height: 900
+});
+
+console.log('Window created with ID:', winInfo);
+
+// 监听页面加载完成
+winInfo.webContents.on('did-stop-loading', (res) => {
+  console.log('Window loaded successfully');
+  console.log(res);
+});
+
+// 监听窗口关闭
+winInfo.on('close', () => {
+  console.log('Window closed');
+});
+```
+## ❓ 常见问题
+
+### 🔧 故障排除
+
+**Q: 遇到未知问题或其他方式无法解决时怎么办？**  
+A: `npm run dev` 重启应用是比较万能的解决方法。如果仍无法解决，请在 [Issues](https://github.com/qew4/mixone-example/issues) 中提交问题。
+
+### 🛠️ 技术支持
+
+**Q: 支持 React 吗？**  
+A: ✅ 支持
+
+**Q: 支持 Vue 吗？**  
+A: ✅ 当前已支持 Vue 2.7 和 Vue 3
 当前已支持vue2.7和vue3。
 - 支持typescript吗？
 vue3和react项目支持typescript
