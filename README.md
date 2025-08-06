@@ -103,19 +103,22 @@ mixone-vue-app/
 │   ├── 📄 request.js             # 请求工具
 │   └── 📄 common.js              # 通用工具
 ├── 📂 out/                       # 📦 编译输出
-└── 📄 package.json               # 项目配置	
+└── 📄 package.json               # 项目配置
 ```
-- 工程文件介绍
-	- 窗口目录
-		窗口目录是指在/windows下的以“-window”结尾的目录（若不以“-window”结尾则为普通文件夹），/windows本身就是根窗口目录。
-	- 窗目录的特性：
-		* 窗口目录是可以嵌套窗口的。
-		* 窗口目录下默认是以Index.vue为访问入口。
-		* 窗口目录下分为页面组件和普通组件，页面组件以“page.vue”结尾，创建后会被mixone识别并加入到vue的路由配置中。
-		* 窗口目录下可以创建preload.js作为窗口的预加载文件，暴露自己定义的方法等功能。preload.js默认会自动创建、若在窗口目录下创建了preload.js则会自动与项目根目录的preload.js合并(如果根preload.js存在)。
-		* 窗口目录下的window.json可以配置窗口的属性，在多个位置打开窗口无需再重复编写相同的属性，不存在window.json则默认。
-		* 窗口目录下的assets文件夹是静态资源文件夹，当前窗口的组件使用。和全局有区别。
-	- main.js
+### 📋 工程文件说明
+
+#### 🖼 窗口目录
+
+**窗口目录**是指 `/windows` 下以 `-window` 结尾的目录（不以 `-window` 结尾则为普通文件夹），`/windows` 本身就是根窗口目录。
+
+**窗口目录特性：**
+
+- 🔗 **可嵌套窗口**：窗口目录支持嵌套结构
+- 🚪 **入口文件**：默认以 `Index.vue` 为访问入口
+- 📄 **页面组件**：以 `page.vue` 结尾的文件会自动加入 Vue 路由配置
+- ⚡ **预加载文件**：可创建 `preload.js` 暴露自定义方法，会与根目录的 `preload.js` 自动合并
+- ⚙️ **窗口配置**：`window.json` 可配置窗口属性，避免重复编写
+- 🎨 **局部资源**：`assets` 文件夹为当前窗口专用的静态资源
 #### 📁 其他重要目录
 
 | 目录/文件 | 说明 | 特点 |
@@ -126,7 +129,7 @@ mixone-vue-app/
 | `utils/` | 全局工具目录 | 所有窗口共享，不建议 main 目录引用 |
 - 窗口目录文件
 ```
-📁 xxxx-window/                    # 窗口目录（以 "-window" 结尾）
+📁 xxxx-window/                    # 🪟 窗口目录（以 "-window" 结尾）
 ├── 📄 Index.vue                   # 🚪 窗口入口文件
 ├── 📄 Second.page.vue             # 📄 页面组件（自动路由）
 ├── 📄 main.ts                     # ⚙️ Vue 项目入口（可选）
@@ -206,7 +209,7 @@ const filePathToRead = await NodeJS.path.join(homeDirectory, 'my_test_document.t
 - **无需预暴露**：语法常量可直接使用，无需提前暴露
 
 > ⚠️ **注意**：当常量语法遇到回调函数、定时器等复杂情况时可能报错，此时应使用注释方式。
-## 🪟 窗口管理类
+## 🖼 窗口管理类
 
 ### 🎛️ 窗口管理功能
 
@@ -279,65 +282,119 @@ A: ✅ 支持
 
 **Q: 支持 Vue 吗？**  
 A: ✅ 当前已支持 Vue 2.7 和 Vue 3
-当前已支持vue2.7和vue3。
-- 支持typescript吗？
-vue3和react项目支持typescript
-- 如何访问Election的API
-主要是指访问Election Main Process API，翻阅electron文档找到使用方法。记得使用了Election API的函数要进行注释。
-- 如何访问NodeJS的包
-nodejs的内置包可以通过NodeJS.包名直接访问，比如：NodeJS.fs,如果是第三方的包需要提前安装。
-- 支持win7吗?
-初始化项目时候electron版本选择v21即可支持win7。
-- 支持mac、Ubuntu吗？
-尚未测试。
-- 改动了需要编辑的代码后没有生效。
-请全部重新启动。以Main、NodeJS、PJS开头的语法发生改动后，有时候需要重启才能生效。
-- 以Main、NodeJS、PJS开头的语法前的await可以不用写吗？
-必须写await，并且所在函数应该是async函数。
-- 使用“// @mainProcess”注释的函数内不要使用以Main、NodeJS、PJS开头的语法。
-- 以Main、NodeJS、PJS开头的语法所调用的函数内部不能再使用以Main、NodeJS、PJS开头的语法为参数。
-- 是否存在官方所说的安全性问题？
-mixone是一个编译工具，你在渲染进程访问主进程API的代码以及NodeJS代码都是按照安全机制实现和编译的。
+**Q: 支持 TypeScript 吗？**  
+A: ✅ Vue 3 和 React 项目支持 TypeScript
+
+**Q: 如何访问 Electron API？**  
+A: 主要指访问 Electron Main Process API，请参考 Electron 文档。记得使用了 Electron API 的函数要进行注释。
+
+**Q: 如何访问 Node.js 包？**  
+A: Node.js 内置包可通过 `NodeJS.包名` 直接访问（如：`NodeJS.fs`），第三方包需要提前安装。
+
+### 🖥️ 平台支持
+
+**Q: 支持 Windows 7 吗？**  
+A: ✅ 初始化项目时选择 Electron v21 即可支持 Win7
+
+**Q: 支持 macOS、Ubuntu 吗？**  
+A: ⚠️ 尚未测试
+
+### ⚠️ 使用注意事项
+
+**Q: 代码修改后没有生效怎么办？**  
+A: 请完全重启应用。以 `Main`、`NodeJS`、`PJS` 开头的语法修改后，有时需要重启才能生效。
+
+**Q: 语法糖前的 `await` 可以省略吗？**  
+A: ❌ 必须写 `await`，且所在函数应该是 `async` 函数。
+
+**Q: 使用限制有哪些？**  
+A: 
+- 使用 `// @mainProcess` 注释的函数内不要使用 `Main`、`NodeJS`、`PJS` 语法
+- 以 `Main`、`NodeJS`、`PJS` 开头的语法调用的函数内部不能再嵌套使用这些语法作为参数
+
+**Q: 是否存在安全性问题？**  
+A: ✅ MixOne 是编译工具，渲染进程访问主进程 API 的代码都按照安全机制实现和编译。
+### 📝 代码示例
+
+#### ❌ 错误写法
+
 ```javascript
-//错误的写法
+// 不要在参数中嵌套使用语法糖
 const result = await Main.dialog.showOpenDialog({
-    title: '选择一个或多个文件',
-    defaultPath: await Main.app.getPath('documents'), // 示例：默认打开文档目录
-    buttonLabel: '选择',
-    filters: [
-        { name: '图片文件', extensions: ['jpg', 'png', 'gif'] },
-        { name: '文本文件', extensions: ['txt', 'md'] },
-        { name: '所有文件', extensions: ['*'] }
-    ],
-    properties: ['openFile', 'multiSelections', 'showHiddenFiles'] // 允许选择文件、允许多选、显示隐藏文件
+  title: '选择一个或多个文件',
+  defaultPath: await Main.app.getPath('documents'), // ❌ 错误：嵌套使用
+  buttonLabel: '选择',
+  filters: [
+    { name: '图片文件', extensions: ['jpg', 'png', 'gif'] },
+    { name: '文本文件', extensions: ['txt', 'md'] },
+    { name: '所有文件', extensions: ['*'] }
+  ],
+  properties: ['openFile', 'multiSelections', 'showHiddenFiles']
 });
-//正确的写法
+
+// ❌ 错误：嵌套使用 NodeJS 语法糖
+await NodeJS.path.join(await NodeJS.os.homedir(), 'my_test_document.txt')
+```
+
+#### ✅ 正确写法
+
+```javascript
+// 先获取路径，再使用
 let documentsPath = await Main.app.getPath('documents');
 const result = await Main.dialog.showOpenDialog({
-    title: '选择一个或多个文件',
-    defaultPath: documentsPath, // 示例：默认打开文档目录
-    buttonLabel: '选择',
-    filters: [
-        { name: '图片文件', extensions: ['jpg', 'png', 'gif'] },
-        { name: '文本文件', extensions: ['txt', 'md'] },
-        { name: '所有文件', extensions: ['*'] }
-    ],
-    properties: ['openFile', 'multiSelections', 'showHiddenFiles'] // 允许选择文件、允许多选、显示隐藏文件
+  title: '选择一个或多个文件',
+  defaultPath: documentsPath, // ✅ 正确：使用变量
+  buttonLabel: '选择',
+  filters: [
+    { name: '图片文件', extensions: ['jpg', 'png', 'gif'] },
+    { name: '文本文件', extensions: ['txt', 'md'] },
+    { name: '所有文件', extensions: ['*'] }
+  ],
+  properties: ['openFile', 'multiSelections', 'showHiddenFiles']
 });
-//错误的写法
-await NodeJS.path.join(await NodeJS.os.homedir(), 'my_test_document.txt')
-//正确的写法
-let documentsPath = await NodeJS.os.homedir();
-await NodeJS.path.join(documentsPath,'my_test_document.txt')
-```
-- 你可以使用别名方式引入文件的方法，支持的别名有@/utils、@/store、@/assets、@/windows、@/components、@/main。
-（preload.js和main/main.js中不能使用别名）
-```javascript
-//使用例子
-//在xxx.vue文件中 
-import {getDocumentsPath2} from '@/utils/api/utils.js';
-```
-## 问题反馈群
-- 有问题请加微信进群。
 
-![项目结构](./qr-wechat.jpg)
+// ✅ 正确：分步骤执行
+let homePath = await NodeJS.os.homedir();
+await NodeJS.path.join(homePath, 'my_test_document.txt')
+```
+### 📂 路径别名支持
+
+支持以下路径别名：
+
+| 别名 | 对应路径 |
+|------|----------|
+| `@/utils` | utils 目录 |
+| `@/store` | store 目录 |
+| `@/assets` | assets 目录 |
+| `@/windows` | windows 目录 |
+| `@/components` | components 目录 |
+| `@/main` | main 目录 |
+
+> ⚠️ **注意**：`preload.js` 和 `main/main.js` 中不能使用别名
+
+```javascript
+// 使用示例
+// 在 xxx.vue 文件中
+import { getDocumentsPath2 } from '@/utils/api/utils.js';
+```
+## 💬 问题反馈
+
+### 📱 微信交流群
+
+有问题请扫码加微信进群交流：
+
+<div align="center">
+
+![微信群二维码](./qr-wechat.jpg)
+
+</div>
+
+---
+
+<div align="center">
+
+**🎉 感谢使用 MixOne！**
+
+如果这个项目对你有帮助，请给我们一个 ⭐ Star！
+
+</div>
