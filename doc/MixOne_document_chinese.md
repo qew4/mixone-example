@@ -1,8 +1,8 @@
-# MixOne文档
+# MixOne文档 v0.1.0
 
 # 简介
 
-MixOne是一个Node脚手架工具，基于Vite实现，用于编译HTML5、JavasCript，Vue，React等源代码，支持打包多HTML入口的(*BS架构*)Web应用和打包(*CS架构*)桌面端安装包。它在构建桌面端时是基于Electron实现。
+MixOne是一个Node脚手架工具，基于Vite实现，用于编译HTML5、JavaScript，Vue，React等源代码，支持打包多HTML入口的(*BS架构*)Web应用和打包(*CS架构*)桌面端安装包。它在构建桌面端时是基于Electron实现。
 
 MixOne有自己的语法糖来访问Electron的API和NodeJS的功能，这种语法糖完全可以取代Electron的IPC通讯代码以提高开发效率；另外还可通过注释方式将定义的函数变为主进程函数；还设计了更强大的插件机制来让MixOne在功能扩展上有无限可能。
 
@@ -83,7 +83,7 @@ const openSetting = async () => {
 
 ## 如何学好、用好MixOne工具？
 
-学好MixOne，看了本文档，你应该具备以下两步
+学好MixOne，看了本文档，你应该具备以下两点
 
 1. 第一步**需要掌握快速开发模式**：窗口目录下的可忽略文件不要创建，你只需创建以”XXX.page.vue(tsx)”结尾的页面组件，即可产生以”XXX.page”为路由name和path的路由定义，只需要router.push({path:”XXX.page”})即可使用。
     
@@ -341,13 +341,13 @@ MixOne提供了桌面应用的窗口管理类，支持窗口的打开、关闭�
 
 1. 如果窗口目录是纯HTML5原生应用，那么它的最精简的结构是怎样的？
 2. 如果窗口既有SPA应用，又有其他原生HTML5页面。那么有哪些必须文件？
-3. 如果窗口目录中的HTML5页面上50个以上，你该如何设计目录结构？
+3. 如果窗口目录中的HTML5页面上50个，你该如何设计目录结构？
 
 ## 窗口可忽略文件
 
-窗口可忽略文件之所以无需创建，是为了让开发者减负，在能不关心的问题上交给MinOne去解决。
+窗口可忽略文件之所以无需创建，是为了让开发者减负，在不必关心的问题上交给MinOne去解决。
 
-当MixOne的默认配置无法满足应用场景时，再把这些忽略文件显式低创建出来，对其进行定制和扩展，以增强功能，使你用MixOne开发出强大的应用，也凸显出MixOne的无限可能。
+当MixOne的默认配置无法满足应用场景时，再把这些忽略文件显式地创建出来，对其进行定制和扩展，以增强功能，使你用MixOne开发出强大的应用，也凸显出MixOne的无限可能。
 
 # 路由跳转及打开新窗口
 
@@ -435,7 +435,7 @@ router.back(1)
 
 ## React框架的路由导航
 
-react-router-web可移步至[https://reactrouter.com/7.7.1/home](https://reactrouter.com/7.7.1/home)官网进行阅读，并没有区别。
+react-router-web移步至[https://reactrouter.com/7.7.1/home](https://reactrouter.com/7.7.1/home)官网进行阅读，并没有区别。
 
 在使用路由导航之前需要先定义路由，而MixOne有自动配置定义路由机制：
 
@@ -477,7 +477,7 @@ export default AppRoutes;
 
 ## 浏览器原生的路由导航
 
-窗口目录的中的html文件，在桌面可以被打开为一个新窗口，在浏览器中打开为一个新标签。有两种方式实现CS和BS环境的差异化处理。
+窗口目录中的html文件，在桌面可以被打开为一个新窗口，在浏览器中打开为一个新标签。有两种方式实现CS和BS环境的差异化处理。
 
 1. **html的a标签**
     
@@ -550,7 +550,7 @@ export default AppRoutes;
 
 # 去IPC语法
 
-去IPC语法也可以说是绕靠IPC繁琐的开发模式。
+去IPC语法也可以说是绕开IPC繁琐的开发模式。
 
 **去IPC的两种方式：**
 
@@ -563,20 +563,267 @@ export default AppRoutes;
 let path = await Main.app.getPath('documents');
 ```
 
-注意事项：
+**语法糖的组成：**
 
-- 必须在语法糖前加await才生效。
-- 语法糖不能嵌套，需要先后顺序。
-- 不支持promise的then的书写模式。
+> 语法糖的组成是MixOne的必修课，不懂语法糖你就不懂MixOne
+> 
+
+MinOne语法糖的组成是由 **关键字 + API名称(包名称)+方法或属性**
+
+![syntactic-sugar.png](syntactic-sugar.png)
+
+**关键词**有Main、NodeJS、PJS三个。**API名称**指的是Electron主进程API。**包名称**指的是Node通过require引入的模块名称。然后以“.”（点）连接起来，就是一个语法糖。
+
+**理解MixOne语法糖**
+
+- 方法或属性是所属对应的API或包名，如果是方法时可以传参数。如果是属性的访问，则不存在参数一说。
+- 语法糖的第二个位置要么是(Electron)API名称，要么是(Node)包名称，只能二选一的存在，不能共存。
+- 语法糖的第三个位置是方法或属性。这些方法或属性所属对应的API名称或包名称。方法可以带参数，参数可以变量，也可以是字符串、数字，但不能是函数（回调函数）、直接的对象（对象可以先赋值给变量再传入参数）。
+
+**以上我们说了什么是MixOne语法糖，那么我们来举几个例子：**
+
+- 原生写入剪贴板方法
+
+```jsx
+Main.clipboard.writeText('Example string')
+```
+
+该语法糖的例子我是从Electron的官网地址https://www.electronjs.org/docs/latest/api/clipboard 中找到了一个clipboard的API，于是我根据MixOne语法糖的组成规则我在前面加上“Main.”字符串组合得到了这么一个语法糖。从文档中看到clipboard有**`writeText`** 的Methods，和参数说明。
+
+![sugar-example-clipboard.png](sugar-example-clipboard.png)
+
+- 获取操作系统名称、CPU架构、平台、版本
+
+```jsx
+//操作系统名称
+NodeJS.os.type()
+//CPU架构
+NodeJS.os.arch()
+//系统平台
+NodeJS.os.platform()
+//操作系统版本
+NodeJS.os.release()
+```
+
+该语法糖的例子我是从https://www.w3schools.com/nodejs/nodejs_os.asp菜鸟网站找到了一个OS模块，根据语法糖的组成规则，我在os.type()的前面加了”NodeJS.”字符串后就变成了MixOne的语法糖。
+
+- 利用PJS通过MixOne插件机制访问系统信息的例子。语法糖不仅可以访问Electron的API和node包，还可以高效的访问自己设计的MixOne原生插件。原生插件的编写请看【插件机制】章节。
+
+```jsx
+PJS.WENJIAN.read() 
+```
+
+上面访问了WENJIAN插件的read方法。那么他的插件是如何写的呢？我贴出来你看
+
+```jsx
+const WENJIAN = {
+    read: function () {
+        return {
+	        electron:process.versions.electron,
+	        node:process.versions.node,
+	        chrome:process.versions.chrome
+        };
+    },
+    write: function (data) {
+        console.log(data);
+    }
+}
+
+module.exports = WENJIAN;
+```
+
+**至此！你能自己组合其他MixOne语法糖了吗？请**在你创建的MixOne项目中试试能否得到你想要的结果，记住，**语法糖前一定要有 await**，await所在函数必须是async异步的哦！
+
+错误的使用语法正确使用语法糖的对比：
+
+**错误：**
+
+```jsx
+const fullPath = NodeJS.path.join('/user', 'documents', 'file.txt');
+```
+
+**正确:**
+
+```jsx
+const fullPath = await NodeJS.path.join('/user', 'documents', 'file.txt');
+```
+
+**错误：**
+
+```jsx
+await NodeJS.path.join(await NodeJS.os.homedir(), 'my_test_document.txt')
+```
+
+**正确：**
+
+```jsx
+let homePath = await NodeJS.os.homedir();
+await NodeJS.path.join(homePath, 'my_test_document.txt')
+```
+
+这个错误的嵌套在MixOne中是不允许的，可以看出这种嵌套是将MixOne语法糖作为另一个语法糖的参数，在实际开发中一定要先后顺序调用语法糖。
+
+**错误：**
+
+```jsx
+const result = await Main.dialog.showOpenDialog({
+  title: '选择一个或多个文件',
+  defaultPath: await Main.app.getPath('documents'), // ❌ 错误：嵌套使用
+  buttonLabel: '选择',
+  filters: [
+    { name: '图片文件', extensions: ['jpg', 'png', 'gif'] },
+    { name: '文本文件', extensions: ['txt', 'md'] },
+    { name: '所有文件', extensions: ['*'] }
+  ],
+  properties: ['openFile', 'multiSelections', 'showHiddenFiles']
+});
+```
+
+正确：
+
+```jsx
+let documentsPath = await Main.app.getPath('documents');
+const result = await Main.dialog.showOpenDialog({
+  title: '选择一个或多个文件',
+  defaultPath: documentsPath, // ✅ 正确：使用变量
+  buttonLabel: '选择',
+  filters: [
+    { name: '图片文件', extensions: ['jpg', 'png', 'gif'] },
+    { name: '文本文件', extensions: ['txt', 'md'] },
+    { name: '所有文件', extensions: ['*'] }
+  ],
+  properties: ['openFile', 'multiSelections', 'showHiddenFiles']
+});
+```
+
+这个错误例子依旧是发生了嵌套错误。
+
+> MixOne语法糖前必须有await关键词！
+> 
+
+> MixOne语法糖也不能嵌套！
+> 
+
+> MixOne语法糖不支持promise的then的书写模式。
+> 
 
 ## 注释。
 
-以”// @mainProcess”注释将函数变为主进程代码。需要注意以下几点：
+以”// @mainProcess”注释将函数变为主进程代码。这是很有用的去IPC方法，通常是以上MixOne语法糖不能满足的情况下使用。
+
+**注释方式去IPC的使用场景**：
+
+- 连续使用语法糖过多，性能低。如果我们采用注释方式，这些频繁调用原生功能的方法就不会来回在主进程和渲染进程之间跨进程通讯。等到最终处理完成才把结果传给渲染进程。
+- 注释为主进程函数可以通过字节码保护重要的算法不被盗取。
+- 有的语法糖有回调函数的参数，这种情况下语法糖是会出错的，我们可以使用注释来变为主进程函数，就可以对原生功能使用回调函数的参数了。
+
+注释法的应用文件：
+
+- js文件中。
+- html文件的script标签中
+- vue文件的script标签中
+- tsx文件中
+
+注释法去IPC的举例：
+
+- 在vue文件中使用注释去IPC的例子。被注释的函数位于选项式API的methods的值中。
+
+![sugar-example-main-note.jpeg](sugar-example-main-note.jpeg)
+
+- 这是在ts文件中使用注释去IPC的例子。在其他文件导入即可使用。
+
+![sugar-example-remove-ipc2.png](sugar-example-remove-ipc2.png)
+
+需要注意以下几点：
 
 - 支持function定义的函数，支持变量定义的普通函数（和箭头函数）
 - 函数必须是顶层作用域的函数，而不是其他作用域内被嵌套的内部函数。
 - 函数内的变量引用必须是函数体内定义的变量，不能引用函数体外定义的变量（参数属于函数体内的变量）。
 - 不要在函数体内使用语法糖，这种混用是不支持的。
+
+# 插件机制
+
+## 插件机制应用场景：
+
+- 实现可复用的原生功能。不仅是项目内复用，还可以复制到其他MixOne内进行复用。
+- 可以在Main目录下编写独立的原生功能模块，而不受到任何限制，可以任意require其他模块，去IPC更彻底。
+- 多窗口之间调用可以保持状态。假设A窗口调用一个add方法从0增加到1，B窗口可以访问到这个是1，也可以继续增加。
+
+他和把函数注释为主进程代码去IPC相比，插件机制更像是一个类，实现的相关功能包含一系列方法和属性。
+
+## 实现插件的要点：
+
+通过 module.exports 导出一个对象即可。如下例子
+
+```jsx
+const WENJIAN = {
+    read: function () {
+        return {
+	        electron:process.versions.electron,
+	        node:process.versions.node,
+	        chrome:process.versions.chrome
+        };
+    },
+    write: function (data) {
+        console.log(data);
+    }
+}
+
+module.exports = WENJIAN;
+```
+
+有时候这样的对象都还不够强大。可以在对象之前创建一些class类，通过这个对象间接的去实例化，访问操作和属性。
+
+```jsx
+//actionStore.js
+class DataProcessor {
+  constructor(data = {}) {
+    this.data = data;
+    this.lastProcessed = null;
+  }
+
+  // 处理数据方法
+  process() {
+    this.lastProcessed = new Date();
+    return {
+      ...this.data,
+      processedAt: this.lastProcessed,
+      summary: this.generateSummary()
+    };
+  }
+
+  // 生成数据摘要
+  generateSummary() {
+    return Object.keys(this.data).length > 0 
+      ? `包含${Object.keys(this.data).length}个属性的数据`
+      : '空数据';
+  }
+
+  // 获取最后处理时间
+  getLastProcessedTime() {
+    return this.lastProcessed;
+  }
+
+  // 静态方法 - 创建预定义实例
+  static createDefault() {
+    return new DataProcessor({
+      name: '默认数据',
+      type: 'object',
+      version: '1.0'
+    });
+  }
+}
+const DataProcessorObj = new DataProcessor()
+const actionStore = {
+    generateSummary: function () {
+        return DataProcessorObj.generateSummary();
+    }
+}
+
+module.exports = actionStore;
+```
+
+可以创建自己的class然后任意通过PJS.actionStore.generateSummary()调用。
 
 # 构建生产版本
 
@@ -594,15 +841,31 @@ npm run build:linux
 npm run build:web
 ```
 
+## 字节码打包
+
+新创建的项目是没有开启字节码的，你需要手动在package.json的如图位置增加“—bytecode”即可实现字节码构建。
+
+![image.png](image.png)
+
 ## 生产版本输出文件夹
 
 - 桌面端文件打包到/dist/packager目录，web打包到/dist/web目录。
 - 优化打包体积
-    - 使用mini打包
+    - 使用mini-electron打包，能缩小到18M的体积。（具体操作请继续关注）
     - 将vue或react移动到devDependencies（node使用的包才放在dependencies）
-    - 压缩图片
+    - 压缩图片。
     - 尽量复用组件。
-    - 尽量避免安装第三方包
+    - 尽量避免安装第三方包。
+    - 如果用不到字节码打包，请在根目录“npm uninstall bytenode”，（之后使用需要再次安装）。
+    - 如果用不到升级，请在根目录“npm uninstall electron-updater”，（之后使用需要再次安装）。
+    - 降级使用electron的版本可以降低打包体积。
+        
+        
+        | electron版本 | 打包exe后的最小体积 |
+        | --- | --- |
+        | V37 | 82M |
+        | V21 | 61M |
+        | V15 | 58M |
 
 # 环境变量和模式
 
@@ -651,7 +914,7 @@ npm run build:web
     ```
     
 - npm run dev 没有打开桌面？
-    - 确实使用此命令前，已经进入改目录执行了“npm install”命令。可以用yarn安装。
+    - 确实使用此命令前，已经进入该目录执行了“npm install”命令。可以用yarn安装。
     - 在命令行 cd 项目目录/node_modules/electron  目录，检查是否有 dist/electron.exe文件，若没有，则需要执行node install.js以安装。
         
         ![check-mixone-electron-install-status.png](check-mixone-electron-install-status.png)
@@ -661,7 +924,7 @@ npm run build:web
 
 # API
 
-MinOne提供的API可以在它创建的MixOne项目中的任何JavaScript脚本位置使用，包括使用在js、ts、tsx、vue等文件中。有的API在主进程和渲染进程中又有区别。
+MinOne提供的API可以在它创建的MixOne项目中的任何JavaScript脚本位置使用，包括在js、ts、tsx、vue等文件中使用。有的API在主进程和渲染进程中又有区别。
 
 ## 窗口管理类
 
@@ -681,8 +944,85 @@ window.windowManager是窗口管理类，具体可访问的方法如下：
 
 - window.winId 常量
 - window.fromWinId 常量。获取窗口打开来路窗口的ID，如果为0表示首次启动，没有来路窗口。
-- window.openWindow()打开新窗口，是window.windowManager.openWindow()的简写
 
 ## Main语法糖访问Electron API举例
 
-未完待续…
+*语法糖的组成原理请看【去IPC】→【语法糖】章节*
+
+以下是参考最新版electron API组合的语法糖前缀，具体的访问方法和属性请移步官方文档。
+
+| **API（Main.API）** | **对应官方文档** |
+| --- | --- |
+| `Main.app` | [https://www.electronjs.org//docs/latest/api/app](https://www.electronjs.org//docs/latest/api/app) |
+| `Main.autoUpdater` | [https://www.electronjs.org//docs/latest/api/auto-updater](https://www.electronjs.org//docs/latest/api/auto-updater) |
+| `Main.BaseWindow` | [https://www.electronjs.org//docs/latest/api/base-window](https://www.electronjs.org//docs/latest/api/base-window) |
+| `Main.BrowserView` | [https://www.electronjs.org//docs/latest/api/browser-view](https://www.electronjs.org//docs/latest/api/browser-view) |
+| `Main.BrowserWindow` | [https://www.electronjs.org//docs/latest/api/browser-window](https://www.electronjs.org//docs/latest/api/browser-window) |
+| `Main.clipboard` | [https://www.electronjs.org//docs/latest/api/clipboard](https://www.electronjs.org//docs/latest/api/clipboard) |
+| `Main.contentTracing` | [https://www.electronjs.org//docs/latest/api/content-tracing](https://www.electronjs.org//docs/latest/api/content-tracing) |
+| `Main.crashReporter` | [https://www.electronjs.org//docs/latest/api/crash-reporter](https://www.electronjs.org//docs/latest/api/crash-reporter) |
+| `Main.desktopCapturer` | [https://www.electronjs.org//docs/latest/api/desktop-capturer](https://www.electronjs.org//docs/latest/api/desktop-capturer) |
+| `Main.dialog` | [https://www.electronjs.org//docs/latest/api/dialog](https://www.electronjs.org//docs/latest/api/dialog) |
+| `Main.globalShortcut` | [https://www.electronjs.org//docs/latest/api/global-shortcut](https://www.electronjs.org//docs/latest/api/global-shortcut) |
+| `Main.inAppPurchase` | [https://www.electronjs.org//docs/latest/api/in-app-purchase](https://www.electronjs.org//docs/latest/api/in-app-purchase) |
+| `Main.ipcMain` | [https://www.electronjs.org//docs/latest/api/ipc-main](https://www.electronjs.org//docs/latest/api/ipc-main) |
+| `Main.Menu` | [https://www.electronjs.org//docs/latest/api/menu](https://www.electronjs.org//docs/latest/api/menu) |
+| `Main.Class: MenuItem` | [https://www.electronjs.org//docs/latest/api/menu-item](https://www.electronjs.org//docs/latest/api/menu-item) |
+| `Main.MessageChannelMain` | [https://www.electronjs.org//docs/latest/api/message-channel-main](https://www.electronjs.org//docs/latest/api/message-channel-main) |
+| `Main.MessagePortMain` | [https://www.electronjs.org//docs/latest/api/message-port-main](https://www.electronjs.org//docs/latest/api/message-port-main) |
+| `Main.nativeImage` | [https://www.electronjs.org//docs/latest/api/native-image](https://www.electronjs.org//docs/latest/api/native-image) |
+| `Main.nativeTheme` | [https://www.electronjs.org//docs/latest/api/native-theme](https://www.electronjs.org//docs/latest/api/native-theme) |
+| `Main.net` | [https://www.electronjs.org//docs/latest/api/net](https://www.electronjs.org//docs/latest/api/net) |
+| `Main.netLog` | [https://www.electronjs.org//docs/latest/api/net-log](https://www.electronjs.org//docs/latest/api/net-log) |
+| `Main.Notification` | [https://www.electronjs.org//docs/latest/api/notification](https://www.electronjs.org//docs/latest/api/notification) |
+| `Main.powerMonitor` | [https://www.electronjs.org//docs/latest/api/power-monitor](https://www.electronjs.org//docs/latest/api/power-monitor) |
+| `Main.powerSaveBlocker` | [https://www.electronjs.org//docs/latest/api/power-save-blocker](https://www.electronjs.org//docs/latest/api/power-save-blocker) |
+| `Main.process` | [https://www.electronjs.org//docs/latest/api/process](https://www.electronjs.org//docs/latest/api/process) |
+| `Main.protocol` | [https://www.electronjs.org//docs/latest/api/protocol](https://www.electronjs.org//docs/latest/api/protocol) |
+| `Main.pushNotifications` | [https://www.electronjs.org//docs/latest/api/push-notifications](https://www.electronjs.org//docs/latest/api/push-notifications) |
+| `Main.safeStorage` | [https://www.electronjs.org//docs/latest/api/safe-storage](https://www.electronjs.org//docs/latest/api/safe-storage) |
+| `Main.screen` | [https://www.electronjs.org//docs/latest/api/screen](https://www.electronjs.org//docs/latest/api/screen) |
+| `Main.session` | [https://www.electronjs.org//docs/latest/api/session](https://www.electronjs.org//docs/latest/api/session) |
+| `Main.ShareMenu` | [https://www.electronjs.org//docs/latest/api/share-menu](https://www.electronjs.org//docs/latest/api/share-menu) |
+| `Main.shell` | [https://www.electronjs.org//docs/latest/api/shell](https://www.electronjs.org//docs/latest/api/shell) |
+| `Main.systemPreferences` | [https://www.electronjs.org//docs/latest/api/system-preferences](https://www.electronjs.org//docs/latest/api/system-preferences) |
+| `Main.TouchBar` | [https://www.electronjs.org//docs/latest/api/touch-bar](https://www.electronjs.org//docs/latest/api/touch-bar) |
+| `Main.Tray` | [https://www.electronjs.org//docs/latest/api/tray](https://www.electronjs.org//docs/latest/api/tray) |
+| `Main.utilityProcess` | [https://www.electronjs.org//docs/latest/api/utility-process](https://www.electronjs.org//docs/latest/api/utility-process) |
+| `Main.webContents` | [https://www.electronjs.org//docs/latest/api/web-contents](https://www.electronjs.org//docs/latest/api/web-contents) |
+| `Main.WebContentsView` | [https://www.electronjs.org//docs/latest/api/web-contents-view](https://www.electronjs.org//docs/latest/api/web-contents-view) |
+| `Main.webFrameMain` | [https://www.electronjs.org//docs/latest/api/web-frame-main](https://www.electronjs.org//docs/latest/api/web-frame-main) |
+| `Main.View` | [https://www.electronjs.org//docs/latest/api/view](https://www.electronjs.org//docs/latest/api/view) |
+
+Node开始的语法糖，但不限于。安装的第三方包也是可以组合为Node语法糖的。
+
+| **模块名 (`NodeJS.模块名`)** | **官方文档地址** |
+| --- | --- |
+| `NodeJS.fs` | [https://nodejs.org/api/fs.html](https://nodejs.org/api/fs.html) |
+| `NodeJS.path` | [https://nodejs.org/api/path.html](https://nodejs.org/api/path.html) |
+| `NodeJS.http` | [https://nodejs.org/api/http.html](https://nodejs.org/api/http.html) |
+| `NodeJS.https` | [https://nodejs.org/api/https.html](https://nodejs.org/api/https.html) |
+| `NodeJS.url` | [https://nodejs.org/api/url.html](https://nodejs.org/api/url.html) |
+| `NodeJS.querystring` | [https://nodejs.org/api/querystring.html](https://nodejs.org/api/querystring.html) |
+| `NodeJS.os` | [https://nodejs.org/api/os.html](https://nodejs.org/api/os.html) |
+| `NodeJS.events` | [https://nodejs.org/api/events.html](https://nodejs.org/api/events.html) |
+| `NodeJS.stream` | [https://nodejs.org/api/stream.html](https://nodejs.org/api/stream.html) |
+| `NodeJS.crypto` | [https://nodejs.org/api/crypto.html](https://nodejs.org/api/crypto.html) |
+| `NodeJS.zlib` | [https://nodejs.org/api/zlib.html](https://nodejs.org/api/zlib.html) |
+| `NodeJS.util` | [https://nodejs.org/api/util.html](https://nodejs.org/api/util.html) |
+| `NodeJS.child_process` | [https://nodejs.org/api/child_process.html](https://nodejs.org/api/child_process.html) |
+| `NodeJS.cluster` | [https://nodejs.org/api/cluster.html](https://nodejs.org/api/cluster.html) |
+| `NodeJS.dns` | [https://nodejs.org/api/dns.html](https://nodejs.org/api/dns.html) |
+| `NodeJS.net` | [https://nodejs.org/api/net.html](https://nodejs.org/api/net.html) |
+| `NodeJS.dgram` | [https://nodejs.org/api/dgram.html](https://nodejs.org/api/dgram.html) |
+| `NodeJS.readline` | [https://nodejs.org/api/readline.html](https://nodejs.org/api/readline.html) |
+| `NodeJS.repl` | [https://nodejs.org/api/repl.html](https://nodejs.org/api/repl.html) |
+| `NodeJS.vm` | [https://nodejs.org/api/vm.html](https://nodejs.org/api/vm.html) |
+| `NodeJS.assert` | [https://nodejs.org/api/assert.html](https://nodejs.org/api/assert.html) |
+| `NodeJS.buffer` | [https://nodejs.org/api/buffer.html](https://nodejs.org/api/buffer.html) |
+| `NodeJS.console` | [https://nodejs.org/api/console.html](https://nodejs.org/api/console.html) |
+| `NodeJS.timers` | [https://nodejs.org/api/timers.html](https://nodejs.org/api/timers.html) |
+| `NodeJS.perf_hooks` | [https://nodejs.org/api/perf_hooks.html](https://nodejs.org/api/perf_hooks.html) |
+| `NodeJS.worker_threads` | [https://nodejs.org/api/worker_threads.html](https://nodejs.org/api/worker_threads.html) |
+
+4
