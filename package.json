@@ -17,7 +17,7 @@
     "build:linux": "npm run compile && npm run build:desktop && mixone package --linux",
     "preview:web": "npm run compile && npm run build:web && mixone preview --start-web",
     "preview:desktop": "npm run compile && npm run build:desktop && mixone preview --start-desktop",
-	"postinstall": "mixone check"
+    "postinstall": "mixone check"
   },
   "build": {
     "appId": "com.example.demo-vue3-5",
@@ -50,19 +50,19 @@
     "electron-updater": "^6.3.9"
   },
   "devDependencies": {
-	"vue": "^3.5.13",
-	"vue-router": "^4.5.1",
-	"pinia": "^3.0.3",
-	"ant-design-vue": "^4.2.6",
+    "@vitejs/plugin-vue": "^6.0.0",
+    "@vue/tsconfig": "^0.7.0",
+    "ant-design-vue": "^4.2.6",
     "chokidar": "^3.5.3",
     "electron": "21.4.4",
     "electron-builder": "^26.0.12",
-    "@vitejs/plugin-vue": "^6.0.0",
-    "@vue/tsconfig": "^0.7.0",
     "less": "^4.3.0",
+    "mixone": "^0.1.0-beta.4",
+    "pinia": "^3.0.3",
     "typescript": "~5.8.3",
-    "vue-tsc": "^2.2.8",
     "vite": "^7.0.4",
-    "mixone":"^0.1.0-alpha.30"
+    "vue": "^3.5.13",
+    "vue-router": "^4.5.1",
+    "vue-tsc": "^2.2.8"
   }
 }
